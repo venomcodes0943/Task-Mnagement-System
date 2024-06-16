@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name')->unique();
             $table->string('color');
+            $table->boolean('archived')->default(false);
             $table->timestamps();
         });
     }

@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UserController;
+use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
+    $peojects = Project::all();
     return view('index');
 })->middleware('auth')->name('index');
 
@@ -17,3 +20,4 @@ Route::group(['controller' => UserController::class], function () {
 });
 
 
+Route::get('/projects', [ProjectController::class, 'index'])->name('projects');
