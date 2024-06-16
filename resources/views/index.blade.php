@@ -30,7 +30,7 @@
                 </div>
             </x-slot>
             <x-slot name="taskAssign">
-                <x-userPicture class="w-6 h-6" :about="__('Manager')" :users="__(
+                <x-userPicture class="w-6 h-6" :about="'Manager'" :users="__(
                     'https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                 )" />
             </x-slot>
@@ -63,7 +63,7 @@
                                     <x-checkbox />
                                     <div class="font-bold">TaskTitle</div>
                                 </div>
-                                <div class="mt-4 flex-1 items-start">
+                                <div class="mt-4 flex items-start">
                                     <span>
                                         <svg xmlns:xlink="http://www.w3.org/1999/xlink"
                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -75,11 +75,9 @@
                                                 fill="none" stroke-width="1.5px"></path>
                                         </svg>
                                     </span>
-                                    <div class="ml-4">
-                                        <span class="text-sm text-gray-300">Discription</span>
-                                        <div class="rounded-md border pt-2 pb-3 px-3">
-                                            {{-- <textarea class="outline-none px-2 block w-full" rows="3" placeholder="Discription"
-                                                style="overflow: hidden; overflow-wrap: break-word; text-align: start; height: 40px;"></textarea> --}}
+                                    <div class="flex-1 ml-4">
+                                        <span class="text-sm text-gray-500" id="disSpan">Description</span>
+                                        <div class="rounded-md border pt-2 pb-3 px-3 w-full hidden" id="disToWrite">
                                             <textarea
                                                 class=" outline-none block h-10 w-full resize-none border-0 p-0 text-sm text-gray-600 placeholder:font-normal placeholder:text-gray-500 focus:ring-0"
                                                 placeholder="Description" style="overflow: hidden; overflow-wrap: break-word; text-align: start; height: 60px;"></textarea>
@@ -87,10 +85,9 @@
                                                 <x-primary-button>
                                                     Save
                                                 </x-primary-button>
-                                                <button class="outline-none px-2 font-bold text-sm">Cancel</button>
+                                                <button class="outline-none px-2 font-bold text-sm"
+                                                    id="cancelToWrite">Cancel</button>
                                             </div>
-
-                                            {{-- <textarea class="" cols="40" rows="2"></textarea> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -127,8 +124,8 @@
                                         </div>
                                     </div>
                                     <div x-show="show" class="pl-8 pr-8">
-                                        <div
-                                            class="flex items-center mt-4 text-gray-700 hover:text-gray-800 cursor-pointer">
+                                        <div id="addItem"
+                                            class="flex items-center mt-4 text-gray-600 hover:text-gray-900 cursor-pointer">
                                             <span class="pr-3">
                                                 <svg xmlns:xlink="http://www.w3.org/1999/xlink"
                                                     xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -141,6 +138,39 @@
                                                 </svg>
                                             </span>
                                             <span>Add Item</span>
+                                        </div>
+                                        <div class="hidden" id="writeItem">
+                                            <div class="flex items-center rounded-md p-2 ">
+                                                <input type="text"
+                                                    class="w-full block outline-none pl-3 border border-slate-300 border-r-0 py-1.5 rounded-s-md text-gray-600"
+                                                    placeholder="Enter checklist item">
+                                                <span id="canelWriteItem"
+                                                    class="border border-slate-300 cursor-pointer border-r-0 hover:bg-slate-700/10 py-2.5 px-4 bg-slate-500/5">
+                                                    <svg xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                        xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                                        viewBox="0 0 21 21" width="21" height="21">
+                                                        <g fill="none" fill-rule="evenodd" stroke="#4B5563"
+                                                            stroke-linecap="round" stroke-linejoin="round"
+                                                            transform="translate(5 5)">
+                                                            <path d="m10.5 10.5-10-10z" stroke="#4B5563"
+                                                                fill="none">
+                                                            </path>
+                                                            <path d="m10.5.5-10 10" stroke="#4B5563" fill="none">
+                                                            </path>
+                                                        </g>
+                                                    </svg>
+                                                </span>
+                                                <span
+                                                    class="border border-slate-300 cursor-pointer rounded-r-md hover:bg-slate-700/10 py-2.5 px-4 bg-slate-500/5">
+                                                    <svg xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
+                                                        fill="white" width="16" height="16">
+                                                        <path
+                                                            d="M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z"
+                                                            fill="#4B5563"></path>
+                                                    </svg>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </section>
@@ -177,9 +207,22 @@
                                         </div>
                                     </div>
                                     <div x-show="show" class="pl-8 pr-8">
-                                        <div
+                                        <div id="comment"
                                             class="cursor-pointer mt-3 rounded-md border border-slate-300 px-4 py-2 text-sm text-gray-600 hover:shadow-sm">
                                             Write a comment
+                                        </div>
+                                        <div class="rounded-md border pt-2 pb-3 px-3 w-full mt-3 hidden" id="writeComment">
+                                            <textarea
+                                                class=" outline-none block h-10 w-full resize-none border-0 p-0 text-sm text-gray-600 placeholder:font-normal placeholder:text-gray-500 focus:ring-0"
+                                                placeholder="Write a comment"
+                                                style="overflow: hidden; overflow-wrap: break-word; text-align: start; height: 60px;"></textarea>
+                                            <div class="flex items-center mt-4">
+                                                <x-primary-button>
+                                                    Save
+                                                </x-primary-button>
+                                                <button class="outline-none px-2 font-bold text-sm"
+                                                    id="cancelComment">Cancel</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </section>
@@ -267,14 +310,14 @@
                                         <x-userPicture class="w-6 h-6" :users="__(
                                             'https://i.pinimg.com/564x/c2/5a/e4/c25ae4d3f7858e110b39a321aa0ad6bb.jpg',
                                         )" />
-                                        <x-userPicture class="w-6 h-6" :about="__("Manager")" :users="__(
+                                        <x-userPicture class="w-6 h-6" :about="'Manager'" :users="__(
                                             'https://i.pinimg.com/564x/c2/5a/e4/c25ae4d3f7858e110b39a321aa0ad6bb.jpg',
                                         )" />
                                     </div>
                                 </section>
                                 <section class="py-2 pb-5">
                                     <h2 class="px-2 text-sm font-bold text-gray-600 mb-2">Delete</h2>
-                                    <div
+                                    <div id="delete"
                                         class="relative flex items-center cursor-pointer bg-gray-600/15 rounded-md hover:shadow-sm px-3 py-[6px]">
                                         <span>
                                             <svg xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -289,7 +332,7 @@
                                         </span>
                                         <span class="text-sm text-gray-500 pl-2">Delete</span>
                                     </div>
-                                    <div>
+                                    <div id="todelete" class="hidden">
                                         <div
                                             class="flex items-center cursor-pointer bg-red-500 hover:bg-red-600 rounded-md hover:shadow-sm px-3 py-[6px]">
                                             <span>
@@ -307,7 +350,7 @@
                                             </span>
                                             <span class="text-sm text-white pl-2">Are you sure</span>
                                         </div>
-                                        <div
+                                        <div id="cancelDelete"
                                             class="flex items-center cursor-pointer bg-gray-600/15 rounded-md hover:shadow-sm px-3 py-[6px] mt-1.5">
                                             <span>
                                                 <svg xmlns:xlink="http://www.w3.org/1999/xlink"
