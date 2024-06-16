@@ -15,6 +15,7 @@
     },
     "dependencies": {
         "alpinejs": "^3.14.0",
+        "ldcover": "^3.5.4",
         "tippy.js": "^6.3.7"
     }
 }

@@ -9,9 +9,7 @@
 </div>
 <div class="hidden md:flex items-center">
     <div class="px-2">
-        <div class="w-7 h-7 rounded-full bg-center bg-contain"
-            style="background-image: url(https://i.pinimg.com/564x/64/8f/14/648f14107f1010e48c04ac29acd6d57b.jpg);">
-        </div>
+        {{ $userPicture }}
     </div>
     <div class="relative md:mr-5" x-data="{ open: false }">
         <div class="flex items-center gap-x-1 cursor-pointer" @click="open = !open">

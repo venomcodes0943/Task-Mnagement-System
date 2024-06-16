@@ -3,11 +3,15 @@ window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+// Alpine Js
+
 import Alpine from 'alpinejs'
 
 window.Alpine = Alpine
 
 Alpine.start()
+
+// Tippy Js
 
 import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
@@ -18,6 +22,48 @@ document.addEventListener('DOMContentLoaded', () => {
         placement: 'bottom'
     });
 });
+
+// ldcover Js
+
+import ldcover from 'ldcover';
+
+const ldcv = new ldcover({ root: "#my-modal" });
+document.querySelector('.openModal').addEventListener('click', function () {
+    ldcv.toggle();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 document.getElementById('btn').addEventListener('click', function () {

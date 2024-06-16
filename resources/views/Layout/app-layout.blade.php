@@ -13,9 +13,10 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 
-<body class="font-mono text-slate-950 ">
+<body class="font-sans text-slate-950">
     <div class="min-h-screen flex bg-gray-200 relative overflow-hidden">
         <div id="sidebar"
             class="w-64 absolute inset-y-0 left-0 transform translate-x-0 bg-slate-800 transition-transform duration-300 ease-in-out z-20">
@@ -166,6 +167,10 @@
                 </div>
                 <div class="flex items-center">
                     <x-navProfile>
+                        <x-slot name="userPicture">
+                            <x-userPicture class="w-8 h-8" :about="__('Admin')" :user="__('https://i.pinimg.com/564x/41/95/7a/41957adcf44b1059bc46a0afda76418a.jpg')" />
+                        </x-slot>
+
                         <x-slot name="userRole">
                             <span class="font-medium">Admin</span>
                         </x-slot>
