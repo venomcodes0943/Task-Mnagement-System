@@ -53,3 +53,13 @@ document.getElementById('btn').addEventListener('click', function () {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    let loader = document.getElementById('loader');
+    if (loader) {
+        setTimeout(() => {
+            loader.classList.add('hidden');
+        }, 1000);
+    }
+});
+
+

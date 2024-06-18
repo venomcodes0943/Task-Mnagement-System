@@ -1,5 +1,7 @@
 <?php
 
+use App\Providers\ProjectServiceProvider;
+
 return [
 
     /*
@@ -123,4 +125,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'Providers' => [
+        ProjectServiceProvider::class
+    ]
 ];

@@ -125,24 +125,18 @@
                         </div>
                     </div>
                     <div class="mt-3 h-96" x-show='show' x-transition>
-                        <x-sideList :title="__('First Project')" :project="__('true')">
-                            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
-                        </x-sideList>
-                        <x-sideList :title="__('Second Project')" :project="__('true')">
-                            <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                        </x-sideList>
-                        <x-sideList :title="__('Third Project')" :project="__('true')">
-                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-                        </x-sideList>
-                        <x-sideList :title="__('Task Management')" :project="__('true')">
-                            <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
-                        </x-sideList>
-                        <x-sideList :title="__('Portfolio')" :project="__('true')">
-                            <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
-                        </x-sideList>
-                        <x-sideList :title="__('CMS')" :project="__('true')">
-                            <div class="w-3 h-3 bg-orange-500 rounded-full"></div>
-                        </x-sideList>
+                        @if (count(app('Projects')) > 0)
+                            @foreach (app('Projects') as $project)
+                                <x-sideList :title="__($project->name)" :project="__('true')">
+                                    <div class="w-3 h-3 rounded-full"
+                                        style="background-color: {{ $project->color }};"></div>
+                                </x-sideList>
+                            @endforeach
+                        @else
+                            <div class="text-white ml-4 font-bold">
+                                No Projects
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -175,16 +169,16 @@
                 <div class="flex items-center">
                     <x-navProfile>
                         <x-slot name="userPicture">
-                            <x-userPicture class="w-8 h-8" :about="__('Admin')" :user="__('https://i.pinimg.com/564x/41/95/7a/41957adcf44b1059bc46a0afda76418a.jpg')" />
+                            <x-userPicture class="w-8 h-8" :about="__(auth()->user()->userRole)" :user="__('https://i.pinimg.com/564x/41/95/7a/41957adcf44b1059bc46a0afda76418a.jpg')" />
                         </x-slot>
 
                         <x-slot name="userRole">
-                            <span class="font-medium">Admin</span>
+                            <span class="font-medium">{{ auth()->user()->userRole }}</span>
                         </x-slot>
 
                         <div class="px-3 pb-1">
                             <span class="text-sm text-gray-600">Signed in as</span>
-                            <span class="text-sm text-gray-700">admin1234@gmail.com</span>
+                            <span class="text-sm text-gray-700">{{ auth()->user()->email }}</span>
                         </div>
                     </x-navProfile>
                 </div>

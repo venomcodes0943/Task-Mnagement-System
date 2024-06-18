@@ -64,4 +64,3 @@ cancelComment.addEventListener('click', function () {
 });
 
 
-// ldcover Js
