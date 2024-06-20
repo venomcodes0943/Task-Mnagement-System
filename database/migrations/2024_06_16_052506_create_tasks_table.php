@@ -15,11 +15,10 @@ return new class extends Migration {
             $table->foreignId('schedule_id');
             $table->string('taskTitle');
             $table->string('description');
-            $table->json('checkList');
-            $table->string('comments');
             $table->string('dueDate');
             $table->string('assignTo')->nullable();
             $table->string('schedule');
+            $table->boolean('completed')->nullable()->default(false);
             $table->timestamps();
         });
     }

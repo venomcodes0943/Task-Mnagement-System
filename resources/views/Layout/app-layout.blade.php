@@ -8,15 +8,11 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="shortcut icon" href="{{ asset('assets/notes-svgrepo-com.svg') }}" type="image/x-icon">
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
 </head>
 
-<body class="font-sans text-slate-950 overflow-hidden">
+<body class="text-slate-950 overflow-hidden">
     <div class="min-h-screen flex bg-gray-200 relative overflow-hidden">
         <div id="sidebar"
             class="w-64 absolute inset-y-0 left-0 transform translate-x-0 bg-slate-800 transition-transform duration-300 ease-in-out z-20">
@@ -85,9 +81,8 @@
                                     fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                     aria-hidden="true" data-slot="icon" class="h-4 w-4 text-gray-500" width="24"
                                     height="24">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="m19.5 8.25-7.5 7.5-7.5-7.5" stroke="#6B7280" fill="none"
-                                        stroke-width="1.5px"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                                        stroke="#6B7280" fill="none" stroke-width="1.5px"></path>
                                 </svg>
                             </span>
                             <span x-show='!show' class="rotate-[-90deg]" style="display: none;">
@@ -127,10 +122,16 @@
                     <div class="mt-3 h-96" x-show='show' x-transition>
                         @if (count(app('Projects')) > 0)
                             @foreach (app('Projects') as $project)
-                                <x-sideList :title="__($project->name)" :project="__('true')">
-                                    <div class="w-3 h-3 rounded-full"
-                                        style="background-color: {{ $project->color }};"></div>
-                                </x-sideList>
+                                @php
+                                    $isActive = request()->routeIs('project') && request()->route('id') == $project->id;
+                                @endphp
+
+                                <a href="{{ route('project', $project->id) }}">
+                                    <x-sideList :title="__($project->name)" :active="$isActive" :project="__('true')">
+                                        <div class="w-3 h-3 py-1 rounded-full"
+                                            style="background-color: {{ $project->color }};"></div>
+                                    </x-sideList>
+                                </a>
                             @endforeach
                         @else
                             <div class="text-white ml-4 font-bold">
@@ -169,11 +170,11 @@
                 <div class="flex items-center">
                     <x-navProfile>
                         <x-slot name="userPicture">
-                            <x-userPicture class="w-8 h-8" :about="__(auth()->user()->userRole)" :user="__('https://i.pinimg.com/564x/41/95/7a/41957adcf44b1059bc46a0afda76418a.jpg')" />
+                            <x-userPicture class="w-8 h-8" :about="__(auth()->user()->userRole ? auth()->user()->userRole : 'User')" :user="__('https://i.pinimg.com/564x/41/95/7a/41957adcf44b1059bc46a0afda76418a.jpg')" />
                         </x-slot>
 
                         <x-slot name="userRole">
-                            <span class="font-medium">{{ auth()->user()->userRole }}</span>
+                            <span class="font-medium">{{ auth()->user()->name ? auth()->user()->name : 'User'}}</span>
                         </x-slot>
 
                         <div class="px-3 pb-1">

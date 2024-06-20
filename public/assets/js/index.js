@@ -64,3 +64,15 @@ cancelComment.addEventListener('click', function () {
 });
 
 
+// Task Add
+
+const addTask = document.querySelectorAll('.addTask');
+const writetask = document.querySelectorAll('.writetask');
+const cancelTask = document.querySelectorAll('.cancelTask');
+
+addTask.addEventListener('click', function () {
+    toggleVisibility(addTask, writetask);
+})
+cancelTask.addEventListener('click', function () {
+    toggleVisibility(writetask, addTask);
+});

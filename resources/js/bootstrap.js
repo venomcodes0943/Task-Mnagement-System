@@ -30,11 +30,38 @@ const rootElement = document.querySelector('#my-modal');
 
 if (rootElement) {
     const ldcv = new ldcover({ root: rootElement });
-    document.querySelector('.openModal').addEventListener('click', function () {
-        ldcv.toggle();
-    });
+    const modals = document.querySelectorAll('.openModal');
+    if (modals) {
+        modals.forEach(modal => {
+            modal.addEventListener('click', function () {
+                ldcv.toggle();
+            });
+        });
+    }
 }
 
+
+// Member Modal
+const memberModal = document.querySelector('#memberModal');
+if (memberModal) {
+    const ldcv = new ldcover({ root: memberModal });
+    console.log(ldcv);
+    const modal = document.querySelector('.openmember');
+    if (modal) {
+        modal.addEventListener('click', function () {
+            ldcv.toggle();
+        });
+    }
+}
+
+
+
+
+
+
+
+
+// Sidebar Handleing
 
 document.getElementById('btn').addEventListener('click', function () {
     let sidebar = document.getElementById('sidebar');
@@ -44,7 +71,6 @@ document.getElementById('btn').addEventListener('click', function () {
     btnLeft.classList.toggle('hidden');
     let mainContent = document.getElementById('main-content');
     if (sidebar) {
-        console.log(sidebar);
         sidebar.classList.toggle('-translate-x-full');
         sidebar.classList.toggle('translate-x-0');
         mainContent.classList.toggle('with-sidebar');
@@ -53,6 +79,7 @@ document.getElementById('btn').addEventListener('click', function () {
     }
 });
 
+// Loader
 document.addEventListener('DOMContentLoaded', function () {
     let loader = document.getElementById('loader');
     if (loader) {

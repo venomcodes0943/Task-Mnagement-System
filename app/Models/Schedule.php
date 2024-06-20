@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        'dueDate' => 'datetime',
+    ];
+    protected $with = ['task'];
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
+    public function task()
+    {
+        return $this->hasMany(Task::class);
+    }
 }

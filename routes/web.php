@@ -19,5 +19,7 @@ Route::group(['controller' => UserController::class], function () {
     Route::get('logout', 'logout')->name('logout');
 });
 
-
-Route::get('/projects', [ProjectController::class, 'index'])->name('projects');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/projects', [ProjectController::class, 'index'])->name('projects');
+    Route::get('/project/{id}', [ProjectController::class, 'show'])->name('project');
+});

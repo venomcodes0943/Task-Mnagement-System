@@ -2,16 +2,16 @@
 
 <div class="ldcv" id="my-modal">
     <div class="base">
-        <div class="inner">
-            <div class="w-[750px] max-h-[590px] overflow-auto">
-                <div class="flex  items-center justify-between border-b border-gray-200 shadow-sm">
+        <div class="inner" style="overflow: auto !important;">
+            <div class="w-[750px] max-h-[590px]">
+                <div class="flex items-center justify-between border-b border-gray-200 shadow-sm">
                     <div class="flex items-center space-x-2 px-6 text-gray-700">
                         <div class="w-2 h-2 bg-red-500 rounded-full"></div>
                         <span>Project Name</span>
                         <span>/</span>
                         <span>Schedule Name</span>
                     </div>
-                    <span data-ldcv-set="" class="p-2 m-2.5 cursor-pointer">
+                    <span data-ldcv-set="" class="p-2 m-2.5 cursor-pointer hover:bg-slate-300/20 rounded-full">
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
                             class="h-5 w-5" viewBox="0 0 21 21" width="21" height="21">
                             <g fill="none" fill-rule="evenodd" stroke="#4B5563" stroke-linecap="round"

@@ -4,7 +4,8 @@
 
         {{-- Page Title Bar  --}}
         <x-mainPageTitle :title="__('Projects')">
-            <div class="flex items-center space-x-3">
+            <div
+                class="flex flex-col md:flex-row items-end space-y-2 md:space-y-0 mb-2 space-x-3 flex-wrap md:items-center">
                 <div class="flex items-center py-1 bg-slate-200 px-3 rounded-md cursor-pointer">
                     <span>
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -43,7 +44,7 @@
             <div class="rounded-lg bg-white shadow-md border">
                 @foreach ($projects as $project)
                     <div class="flex items-center justify-between px-6 py-3 border-b">
-                        <a href="#">
+                        <a href="{{ route('project', $project->id) }}">
                             <div class="flex items-center">
                                 <div class="w-2.5 h-2.5 rounded-full" style="background-color: {{ $project->color }};">
                                 </div>

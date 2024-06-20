@@ -12,4 +12,10 @@ class ProjectController extends Controller
         $projects = Project::all();
         return view('projects', compact('projects'));
     }
+
+    public function show($id)
+    {
+        $project = Project::findOrFail($id);
+        return view('schedule', compact('project'));
+    }
 }
