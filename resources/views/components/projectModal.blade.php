@@ -1,7 +1,7 @@
 <div class="ldcv" id="projectModal">
     <div class="base">
         <div class="inner">
-            <div class="px-6 pt-6 w-[650px]">
+            <div class="px-6 pt-6 w-auto md:w-[630px]">
                 <div class="flex items-center justify-between">
                     <div class="text-2xl font-semibold">Create Project</div>
                     <span data-ldcv-set="" class="cursor-pointer">
@@ -17,9 +17,12 @@
                 </div>
                 <div class="py-3">
                     <label for="name" class="block text-gray-600 font-semibold">Name</label>
-                    <input type="text" id="name"
+                    <input type="text" id="name" name="name"
                         class="w-full outline-none border shadow-sm py-1.5 mt-1 pl-3 rounded-md border-slate-300"
                         placeholder="Name">
+                    @error('name')
+                        {{ $message }}
+                    @enderror
                 </div>
                 <style>
                     .selected-outline {
@@ -29,7 +32,7 @@
                         /* Adjust as needed */
                     }
                 </style>
-                <div class="flex gap-1 mt-1 pb-6">
+                <div class="flex flex-wrap gap-1 mt-1 pb-6">
                     @foreach (['#64748B', '#71717A', '#EF4444', '#F97316', '#EAB308', '#22C55E', '#14B8A6', '#0EA5E9', '#6366F1', '#EC4899', '#F43F5E'] as $index => $color)
                         <label class="color-label w-6 h-6 rounded-md cursor-pointer"
                             style="background-color: {{ $color }};" data-color="{{ $color }}"
@@ -45,10 +48,20 @@
                 </x-primary-button>
 
                 <button id="addNewProject"
-                    class="px-3 py-[6px] bg-blue-700 hover:bg-blue-600 text-white rounded-md font-bold cursor-pointer openModal">
+                    class="text-[14px] px-3 py-[6px] bg-blue-700 hover:bg-blue-600 text-white rounded-md font-bold cursor-pointer">
                     Create Project
                 </button>
             </div>
         </div>
     </div>
 </div>
+<script src="{{ asset('assets/js/jquery.js') }}"></script>
+<script>
+    var colorLabels = document.querySelectorAll('.color-label');
+    colorLabels.forEach(label => {
+        label.addEventListener('click', () => {
+            colorLabels.forEach(l => l.classList.remove('selected-outline'));
+            label.classList.add('selected-outline');
+        });
+    });
+</script>

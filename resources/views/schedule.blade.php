@@ -1,7 +1,7 @@
 <x-app-layout>
     {{-- ------------------Loader----------------------- --}}
 
-    <x-loader />
+    {{-- <x-loader /> --}}
 
     {{-- ------------------Page Main Content----------------------- --}}
 
@@ -13,17 +13,18 @@
                 <div class="relative flex items-center" x-data="{ open: false }">
                     <div @click = "open = !open"
                         class="cursor-pointer w-7 h-7 rounded hover:bg-slate-200 flex items-center justify-center">
-                        <div class="h-2.5 w-2.5 rounded-full" style="background-color:{{ $project->color }}"></div>
+                        <div class="h-2.5 w-2.5 rounded-full" id="pointColor"></div>
                     </div>
                     <div>
                         <div class="md:text-xl p-1 rounded hover:bg-slate-200 cursor-pointer">
                             {{ $project->name }}
                         </div>
                     </div>
-                    <div x-show = "open"
+                    <div x-show = "open" style="display: none;"
                         class="flex items-center z-30 flex-wrap gap-2 bg-white border shadow p-2 absolute top-10 rounded-md left-2 w-60"">
                         @foreach (['#64748B', '#71717A', '#EF4444', '#F97316', '#EAB308', '#22C55E', '#14B8A6', '#0EA5E9', '#6366F1', '#EC4899', '#F43F5E'] as $color)
-                            <div class="w-6 h-6 rounded cursor-pointer" style="background-color: {{ $color }};">
+                            <div class="color-option w-6 h-6 rounded cursor-pointer"
+                                style="background-color: {{ $color }};" data-myColor="{{ $color }}">
                             </div>
                         @endforeach
                     </div>
@@ -96,7 +97,8 @@
                                                 <g fill="none" fill-rule="evenodd" stroke="#4B5563"
                                                     stroke-linecap="round" stroke-linejoin="round"
                                                     transform="translate(5 5)">
-                                                    <path d="m10.5 10.5-10-10z" stroke="#4B5563" fill="none"></path>
+                                                    <path d="m10.5 10.5-10-10z" stroke="#4B5563" fill="none">
+                                                    </path>
                                                     <path d="m10.5.5-10 10" stroke="#4B5563" fill="none"></path>
                                                 </g>
                                             </svg>
@@ -372,7 +374,7 @@
 
                     {{-- ------------------ Add List ----------------------- --}}
 
-                    <div
+                    <div id="addList"
                         class="cursor-pointer min-w-60 md:min-w-72 flex items-center h-max py-2.5 mt-1 border-2 border-dashed px-3 rounded-lg border-slate-400 hover:bg-slate-200/20">
                         <span>
                             <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
@@ -386,6 +388,18 @@
                             Add list
                         </span>
                     </div>
+                    <div id="writeList" class="hidden bg-slate-400/20 h-fit p-2 rounded-lg min-w-60 md:min-w-72">
+                        <input type="text"
+                            class="w-full px-3 outline-none mb-2 block border-2 border-sky-600 py-0.5 rounded-md"
+                            placeholder="Enter list title...">
+                        <div class="flex items-center space-x-2">
+                            <div
+                                class="px-3 py-1 bg-blue-700 hover:bg-blue-600 text-white rounded-md font-bold cursor-pointer w-max">
+                                Add list</div>
+                            <div id="cancelList"
+                                class="font-semibold text-gray-500 hover:text-gray-800 cursor-pointer">Cancel</div>
+                        </div>
+                    </div>
                 </div>
             </main>
         </section>
@@ -394,4 +408,42 @@
     {{-- Task Modal --}}
     <x-taskModal :taskDetails="true" />
     <script src="{{ asset('assets/js/index.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.js') }}"></script>
+
+    <script>
+        function getProject() {
+            let currenturl = window.location.href;
+            let segment = currenturl.split('/');
+            let id = segment.pop();
+            // let finalId = parseInt(projectId, 10);
+            let url = "/project/" + id;
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function(response) {
+                    let project = response.project
+                    $("#pointColor").css('background-color', project.color);
+                }
+            });
+        }
+        getProject();
+        $('.color-option').click(function() {
+            var myColor = $(this).data('mycolor');
+            $.ajax({
+                type: "POST",
+                url: "{{ route('project.update', ['id' => $project->id]) }}",
+                data: {
+                    color: myColor,
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function(response) {
+                    getProject();
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText); // Log any errors for debugging
+                    // Handle error scenario if needed
+                }
+            });
+        });
+    </script>
 </x-app-layout>

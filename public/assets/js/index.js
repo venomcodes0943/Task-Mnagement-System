@@ -63,16 +63,31 @@ cancelComment.addEventListener('click', function () {
     toggleVisibility(writeComment, comment);
 });
 
+// Task List
+
+const addList = document.getElementById('addList')
+const writeList = document.getElementById('writeList')
+const cancelList = document.getElementById('cancelList')
+
+addList.addEventListener('click', function () {
+    toggleVisibility(addList, writeList);
+})
+
+cancelList.addEventListener('click', function () {
+    toggleVisibility(writeList, addList);
+})
+
+
 
 // Task Add
 
-const addTask = document.querySelectorAll('.addTask');
-const writetask = document.querySelectorAll('.writetask');
-const cancelTask = document.querySelectorAll('.cancelTask');
+// const addTask = document.querySelectorAll('.addTask');
+// const writetask = document.querySelectorAll('.writetask');
+// const cancelTask = document.querySelectorAll('.cancelTask');
 
-addTask.addEventListener('click', function () {
-    toggleVisibility(addTask, writetask);
-})
-cancelTask.addEventListener('click', function () {
-    toggleVisibility(writetask, addTask);
-});
+// addTask.addEventListener('click', function () {
+//     toggleVisibility(addTask, writetask);
+// })
+// cancelTask.addEventListener('click', function () {
+//     toggleVisibility(writetask, addTask);
+// });

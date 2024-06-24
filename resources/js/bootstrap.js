@@ -64,7 +64,6 @@ if (projectModal) {
 const memberModal = document.querySelector('#memberModal');
 if (memberModal) {
     const ldcv = new ldcover({ root: memberModal });
-    console.log(ldcv);
     const modal = document.querySelector('.openmember');
     if (modal) {
         modal.addEventListener('click', function () {
@@ -72,8 +71,6 @@ if (memberModal) {
         });
     }
 }
-
-
 
 
 

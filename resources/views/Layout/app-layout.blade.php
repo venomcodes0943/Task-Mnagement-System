@@ -7,7 +7,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
+
+    <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('assets/notes-svgrepo-com.svg') }}" type="image/x-icon">
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -98,7 +101,7 @@
                             <span class="text-slate-400 font-bold text-sm">Projects</span>
                         </div>
                         <div class="flex items-center gap-x-2">
-                            <a href="#" class="cursor-pointer hover:bg-slate-100/15 p-1 rounded">
+                            <div class="cursor-pointer hover:bg-slate-100/15 p-1 rounded">
                                 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                     aria-hidden="true" data-slot="icon" class="h-3.5 w-3.5" width="24"
@@ -107,9 +110,8 @@
                                         d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776"
                                         stroke="#6B7280" fill="none" stroke-width="1.5px"></path>
                                 </svg>
-                            </a>
-                            <a href="#"
-                                class="cursor-pointer hover:bg-slate-100/15 p-1 rounded openProjectModal">
+                            </div>
+                            <div class="cursor-pointer hover:bg-slate-100/15 p-1 rounded openProjectModal">
                                 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                     aria-hidden="true" data-slot="icon" class="h-4 w-4" width="24"
@@ -117,7 +119,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"
                                         stroke="#6B7280" fill="none" stroke-width="1.5px"></path>
                                 </svg>
-                            </a>
+                            </div>
                         </div>
                     </div>
                     <div class="mt-3 h-96" x-show='show' x-transition>
