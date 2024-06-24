@@ -26,11 +26,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
 import ldcover from 'ldcover';
 
-const rootElement = document.querySelector('#my-modal');
 
-if (rootElement) {
-    const ldcv = new ldcover({ root: rootElement });
+// TaskModal
+
+const taskModal = document.querySelector('#taskModal');
+
+if (taskModal) {
+    const ldcv = new ldcover({ root: taskModal });
     const modals = document.querySelectorAll('.openModal');
+    if (modals) {
+        modals.forEach(modal => {
+            modal.addEventListener('click', function () {
+                ldcv.toggle();
+            });
+        });
+    }
+}
+
+// ProjectModal
+
+const projectModal = document.querySelector('#projectModal');
+
+if (projectModal) {
+    const ldcv = new ldcover({ root: projectModal });
+    const modals = document.querySelectorAll('.openProjectModal');
     if (modals) {
         modals.forEach(modal => {
             modal.addEventListener('click', function () {
@@ -88,5 +107,4 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 1000);
     }
 });
-
 

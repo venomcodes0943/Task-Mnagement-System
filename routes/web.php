@@ -22,4 +22,5 @@ Route::group(['controller' => UserController::class], function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects');
     Route::get('/project/{id}', [ProjectController::class, 'show'])->name('project');
+    Route::post('project/create', [ProjectController::class, 'create'])->name('project.create');
 });

@@ -1,6 +1,6 @@
 @props(['taskDetails'])
 
-<div class="ldcv" id="my-modal">
+<div class="ldcv" id="taskModal">
     <div class="base">
         <div class="inner" style="overflow: auto !important;">
             <div class="w-[750px] max-h-[590px]">

@@ -108,7 +108,8 @@
                                         stroke="#6B7280" fill="none" stroke-width="1.5px"></path>
                                 </svg>
                             </a>
-                            <a href="#" class="cursor-pointer hover:bg-slate-100/15 p-1 rounded">
+                            <a href="#"
+                                class="cursor-pointer hover:bg-slate-100/15 p-1 rounded openProjectModal">
                                 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                     aria-hidden="true" data-slot="icon" class="h-4 w-4" width="24"
@@ -170,11 +171,11 @@
                 <div class="flex items-center">
                     <x-navProfile>
                         <x-slot name="userPicture">
-                            <x-userPicture class="w-8 h-8" :about="__(auth()->user()->userRole ? auth()->user()->userRole : 'User')" :user="__('https://i.pinimg.com/564x/41/95/7a/41957adcf44b1059bc46a0afda76418a.jpg')" />
+                            <x-userPicture class="w-6 h-6" :about="__(auth()->user()->userRole ? auth()->user()->userRole : 'User')" :user="__('https://i.pinimg.com/564x/41/95/7a/41957adcf44b1059bc46a0afda76418a.jpg')" />
                         </x-slot>
 
                         <x-slot name="userRole">
-                            <span class="font-medium">{{ auth()->user()->name ? auth()->user()->name : 'User'}}</span>
+                            <span class="font-medium">{{ auth()->user()->name ? auth()->user()->name : 'User' }}</span>
                         </x-slot>
 
                         <div class="px-3 pb-1">
@@ -188,6 +189,7 @@
             {{ $slot }}
         </div>
     </div>
+    <x-projectModal />
 </body>
 
 </html>

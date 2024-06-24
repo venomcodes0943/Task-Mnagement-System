@@ -33,7 +33,7 @@
                     <span class="pl-2">Archived</span>
                 </div>
                 <div
-                    class="px-3 py-1 bg-blue-700 hover:bg-blue-600 text-white rounded-md font-bold cursor-pointer openModal">
+                    class="px-3 py-1 bg-blue-700 hover:bg-blue-600 text-white rounded-md font-bold cursor-pointer openProjectModal">
                     Create
                     Project</div>
             </div>
@@ -41,8 +41,8 @@
         {{-- Page Content  --}}
 
         @if (count($projects) > 0)
-            <div class="rounded-lg bg-white shadow-md border">
-                @foreach ($projects as $project)
+            <div class="rounded-lg bg-white shadow-md border" id="projectList">
+                {{-- @foreach ($projects as $project)
                     <div class="flex items-center justify-between px-6 py-3 border-b">
                         <a href="{{ route('project', $project->id) }}">
                             <div class="flex items-center">
@@ -62,7 +62,7 @@
                             </svg>
                         </span>
                     </div>
-                @endforeach
+                @endforeach --}}
             </div>
         @else
             <div class="px-6 py-3 mt-44">
@@ -70,51 +70,100 @@
             </div>
         @endif
 
-        <div class="ldcv" id="my-modal">
-            <div class="base">
-                <div class="inner">
-                    <div class="px-6 pt-6 w-[650px]">
-                        <div class="flex items-center justify-between">
-                            <div class="text-2xl font-semibold">Create Project</div>
-                            <span data-ldcv-set="" class="cursor-pointer">
-                                <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
-                                    class="h-7 w-7" viewBox="0 0 21 21" width="21" height="21">
-                                    <g fill="none" fill-rule="evenodd" stroke="#4B5563" stroke-linecap="round"
-                                        stroke-linejoin="round" transform="translate(5 5)">
-                                        <path d="m10.5 10.5-10-10z" stroke="#4B5563" fill="none"></path>
-                                        <path d="m10.5.5-10 10" stroke="#4B5563" fill="none"></path>
-                                    </g>
-                                </svg>
-                            </span>
-                        </div>
-                        <div class="py-3">
-                            <label for="name" class="block text-gray-600 font-semibold">Name</label>
-                            <input type="text" id="name"
-                                class="w-full outline-none border shadow-sm py-1.5 mt-1 pl-3 rounded-md border-slate-300"
-                                placeholder="Name">
-                        </div>
-                        <div class="pt-2 ml-2">
-                            <span class="block">Color</span>
-                            <div class="flex gap-1 mt-1 pb-6">
-                                @foreach (['#64748B', '#71717A', '#EF4444', '#F97316', '#EAB308', '#22C55E', '#14B8A6', '#0EA5E9', '#6366F1', '#EC4899', '#F43F5E'] as $color)
-                                    <label class="w-6 h-6 rounded-md cursor-pointer"
-                                        style="background-color: {{ $color }};">
-                                        <input type="radio" class="hidden" name="color"
-                                            value="{{ $color }}">
-                                    </label>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-slate-300/20 py-5 px-6 flex items-center justify-end space-x-2">
-                        <x-primary-button data-ldcv-set="">
-                            Cancel
-                        </x-primary-button>
-                        <div
-                            class="px-3 py-[6px] bg-blue-700 hover:bg-blue-600 text-white rounded-md font-bold cursor-pointer openModal">
-                            Create Project</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <x-projectModal />
 </x-app-layout>
+<script>
+    const colorLabels = document.querySelectorAll('.color-label');
+    colorLabels.forEach(label => {
+        label.addEventListener('click', () => {
+            colorLabels.forEach(l => l.classList.remove('selected-outline'));
+            label.classList.add('selected-outline');
+        });
+    });
+</script>
+<script src="{{ asset('assets/js/jquery.js') }}"></script>
+<script>
+    function fetchProjects() {
+        $.ajax({
+            url: "{{ route('projects') }}",
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                $('#projectList').empty();
+
+                response.forEach(function(project) {
+                    const projectDiv = $('<div>').addClass(
+                        'flex items-center justify-between px-6 py-3 border-b');
+                    const projectLink = $('<a>').attr('href',
+                        "{{ route('project', '') }}/" + project.id).append(
+                        // Project Color Dot
+                        $('<div>').addClass('flex items-center').append(
+                            $('<div>').addClass('w-2.5 h-2.5 rounded-full').css(
+                                'background-color', project.color),
+                            // Project Name
+                            $('<div>').addClass(
+                                'pl-3 text-gray-600 hover:underline').text(project
+                                .name)
+                        )
+                    );
+
+                    const iconSpan = $('<span>')
+                        .addClass('cursor-pointer')
+                        .append(`
+                            <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                aria-hidden="true" data-slot="icon" class="h-4 w-4 group-hover:text-gray-800"
+                                width="24" height="24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"
+                                    stroke="#4B5563" fill="none" stroke-width="1.5px"></path>
+                            </svg>`);
+
+                    projectDiv.append(projectLink, iconSpan);
+                    $('#projectList').append(projectDiv);
+                });
+            },
+            error: function(error) {
+                console.error('Error fetching projects:', error);
+            }
+        });
+    }
+
+    fetchProjects();
+
+    let selectedColor = null;
+
+    // Event listener for color selection
+    $(".color-label").click(function() {
+        selectedColor = $(this).data("color");
+    });
+
+    $("#addNewProject").click(function(e) {
+        e.preventDefault();
+
+        const projectName = $("#name").val();
+        const projectColor = selectedColor;
+        if (!selectedColor) {
+            alert("Please select a color.");
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('project.create') }}",
+            type: "POST",
+            data: {
+                name: projectName,
+                color: projectColor,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                console.log("Project created successfully:", response);
+                fetchProjects();
+                const projectModal = $('#projectModal').hide();
+            },
+            error: function(xhr, status, error) {
+                console.error("An error occurred:", error);
+            }
+        });
+    });
+</script>
