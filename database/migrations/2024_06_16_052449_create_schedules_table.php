@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id');
-            $table->string('title')->unique();
+            $table->string('title');
             $table->timestamps();
         });
     }

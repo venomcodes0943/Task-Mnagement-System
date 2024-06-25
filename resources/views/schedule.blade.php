@@ -207,12 +207,13 @@
                     {{-- @dd($project->schedule) --}}
                     @if (count($project->schedule) > 0)
                         @foreach ($project->schedule as $schedule)
+                            <div id="scheduleList"></div>
                             <div
                                 class="h-max min-w-60  md:min-w-72 inline-block pb-2 mr-4 bg-slate-400/20 rounded-lg relative inset-0">
                                 <div class="flex items-center justify-between p-2 px-3" x-data="{ show: false }">
-                                    <div x-show="show"
+                                    <div x-show="show" style="display: none;"
                                         class="absolute cursor-pointer bg-white block py-1 w-64 rounded-md top-10 left-4 z-50 shadow-lg">
-                                        <div class="hover:bg-slate-400/15 py-1 px-4 text-gray-500 ">Delete</div>
+                                        <div class="hover:bg-slate-400/15 py-1 px-4 text-gray-500">Delete</div>
                                     </div>
                                     <span
                                         class="text-gray-600 font-semibold">{{ str_word_count($schedule->title, 0) > 2 ? implode(' ', array_slice(explode(' ', $schedule->title), 0, 2)) . '...' : $schedule->title }}</span>
@@ -228,6 +229,8 @@
                                         </svg>
                                     </span>
                                 </div>
+
+
                                 {{-- ------------------Tasks Start----------------------- --}}
                                 <div class="overflow-y-auto px-2 max-h-80 min-h-0">
                                     @if (count($schedule->task) > 0)
@@ -284,6 +287,7 @@
                                                         )" />
                                                 </div>
                                             </div>
+
                                             <div
                                                 class="mb-2 openModal cursor-pointer bg-white rounded-lg px-3 py-1 text-gray-700 shadow hover:shadow-md">
                                                 <div class="py-1.5 text-gray-500 text-sm">User feedback gathering</div>
@@ -351,8 +355,8 @@
                                         @endforeach
                                     @endif
                                 </div>
-
                                 {{-- ------------------Tasks End----------------------- --}}
+
                                 <div
                                     class="cursor-pointer hover:bg-slate-500/20 mt-3 mx-1 px-2 py-[6px] rounded-md flex items-center addTask">
                                     <span>
@@ -389,11 +393,11 @@
                         </span>
                     </div>
                     <div id="writeList" class="hidden bg-slate-400/20 h-fit p-2 rounded-lg min-w-60 md:min-w-72">
-                        <input type="text"
+                        <input type="text" id="taskTitle"
                             class="w-full px-3 outline-none mb-2 block border-2 border-sky-600 py-0.5 rounded-md"
                             placeholder="Enter list title...">
                         <div class="flex items-center space-x-2">
-                            <div
+                            <div id="addNewList"
                                 class="px-3 py-1 bg-blue-700 hover:bg-blue-600 text-white rounded-md font-bold cursor-pointer w-max">
                                 Add list</div>
                             <div id="cancelList"
@@ -411,12 +415,56 @@
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
 
     <script>
+        function loadSchedule(schedule) {
+            
+        }
+        $(document).ready(function() {
+            $.ajax({
+                type: "GET",
+                url: "{{ route('project', ['id' => $project->id]) }}",
+                success: function(response) {
+                    response.project.schedule.forEach(function(schedule) {
+                        console.log(schedule);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("An error occurred:", error);
+                }
+            });
+        });
+
+
+
+
+        $(document).on('click', '#addNewList', function() {
+            const taskTitle = $("#taskTitle").val();
+            const projectId = {{ $project->id }};
+            // console.log(projectId, taskTitle);
+            $.ajax({
+                type: "POST",
+                url: "{{ route('schedule.create') }}",
+                data: {
+                    project_id: projectId,
+                    title: taskTitle,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error("An error occurred:", error);
+                }
+            });
+        });
+
+
+
+
+
+
+
         function getProject() {
-            let currenturl = window.location.href;
-            let segment = currenturl.split('/');
-            let id = segment.pop();
-            // let finalId = parseInt(projectId, 10);
-            let url = "/project/" + id;
+            let url = "/project/" + {{ $project->id }};
             $.ajax({
                 type: "GET",
                 url: url,
@@ -427,6 +475,7 @@
             });
         }
         getProject();
+
         $('.color-option').click(function() {
             var myColor = $(this).data('mycolor');
             $.ajax({
@@ -440,8 +489,7 @@
                     getProject();
                 },
                 error: function(xhr, status, error) {
-                    console.error(xhr.responseText); // Log any errors for debugging
-                    // Handle error scenario if needed
+                    console.error(xhr.responseText);
                 }
             });
         });

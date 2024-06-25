@@ -48,7 +48,6 @@
                 <div class="pl-3 text-gray-600 font-bold text-center text-3xl">No Projects</div>
             </div>
         @endif
-
         <x-projectModal />
 </x-app-layout>
 <script src="{{ asset('assets/js/jquery.js') }}"></script>
@@ -61,8 +60,11 @@
             success: function(response) {
                 $('#projectListActive').empty();
                 $('#projectListArchived').empty();
+                let activeProjectCount = 0;
+                let archivedProjectCount = 0;
                 response.forEach(function(project) {
                     if (project.archived === 0) {
+                        activeProjectCount++;
                         const projectDiv = $('<div>').addClass(
                             'flex items-center justify-between px-6 py-3 border-b');
                         const projectLink = $('<a>').attr('href',
@@ -79,7 +81,7 @@
                         );
 
                         const iconSpan = $('<span>')
-                            .addClass('cursor-pointer archivedIcon tooltip p-2')
+                            .addClass('cursor-pointer archivedIcon tooltip')
                             .attr('data-tippy', 'Archived')
                             .attr('id', project.id)
                             .append(`
@@ -95,6 +97,7 @@
                         projectDiv.append(projectLink, iconSpan);
                         $('#projectListActive').append(projectDiv);
                     } else {
+                        archivedProjectCount++;
                         const projectDiv = $('<div>')
                             .addClass('flex items-center justify-between px-6 py-3 border-b');
                         const projectLink = $('<a>')
@@ -111,21 +114,27 @@
                             );
 
                         const iconSpan = $('<span>')
-                            .addClass('cursor-pointer')
-                            .append(`
-                            <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                aria-hidden="true" data-slot="icon" class="h-4 w-4 group-hover:text-gray-800"
-                                width="24" height="24">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"
-                                    stroke="#4B5563" fill="none" stroke-width="1.5px"></path>
-                            </svg>`);
+                            .addClass('cursor-pointer UnarchivedIcon tooltip')
+                            .attr('data-tippy', 'Archived')
+                            .attr('id', project.id)
+                            .append(
+                                `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-4 w-4 cursor-pointer text-gray-600 hover:text-gray-900" width="24"  height="24" ><path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m6 4.125 2.25 2.25m0 0 2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" stroke="#4B5563" fill="none" stroke-width="1.5px"></path></svg>`
+                            );
 
                         projectDiv.append(projectLink, iconSpan);
                         $('#projectListArchived').append(projectDiv);
                     }
                 });
+                if (activeProjectCount === 0) {
+                    $('#projectListActive').append(
+                        '<div class="pl-3 text-gray-600 my-4 font-bold text-center text-3xl">No Active Project</div>'
+                    );
+                }
+                if (archivedProjectCount === 0) {
+                    $('#projectListArchived').append(
+                        '<div class="pl-3 text-gray-600 my-4 font-bold text-center text-3xl">No Archived Project</div>'
+                    );
+                }
             },
             error: function(error) {
                 console.error('Error fetching projects:', error);
@@ -142,6 +151,24 @@
             url: "{{ route('project.update', '') }}/" + projectId,
             data: {
                 archived: 1,
+                _token: '{{ csrf_token() }}',
+            },
+            success: function(response) {
+                fetchProjects(); // Refresh the project list after successful update
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText); // Log any errors for debugging
+                // Handle error scenario if needed
+            }
+        });
+    });
+    $(document).on('click', '.UnarchivedIcon', function() {
+        let projectId = $(this).attr('id');
+        $.ajax({
+            type: "POST",
+            url: "{{ route('project.update', '') }}/" + projectId,
+            data: {
+                unarchived: 0,
                 _token: '{{ csrf_token() }}',
             },
             success: function(response) {
@@ -181,7 +208,6 @@
                 _token: '{{ csrf_token() }}'
             },
             success: function(response) {
-                console.log("Project created successfully:", response);
                 fetchProjects();
             },
             error: function(xhr, status, error) {

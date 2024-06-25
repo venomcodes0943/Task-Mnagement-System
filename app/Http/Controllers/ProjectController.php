@@ -57,6 +57,10 @@ class ProjectController extends Controller
         if ($request->has('archived')) {
             $project->archived = $request->archived;
         }
+
+        if ($request->has('unarchived')) {
+            $project->archived = $request->unarchived;
+        }
         try {
             $project->save();
             return response()->json(['message' => 'Record updated successfully', 'record' => $project], 200);

@@ -9,6 +9,8 @@ class Schedule extends Model
 {
     use HasFactory;
 
+
+    protected $fillable = ['project_id', 'title'];
     protected $casts = [
         'dueDate' => 'datetime',
     ];
