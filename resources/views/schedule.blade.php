@@ -200,14 +200,13 @@
 
             {{-- --------------------Task's Lists----------------------- --}}
             <main class="relative">
-                <div
-                    class="absolute inset-0 select-none overflow-x-auto overflow-y-hidden whitespace-nowrap transition-opacity flex">
+                <div class="absolute inset-0 select-none overflow-x-auto overflow-y-hidden whitespace-nowrap transition-opacity flex"
+                    id="schduelDivMain">
 
                     {{-- ------------------ List ----------------------- --}}
                     {{-- @dd($project->schedule) --}}
                     @if (count($project->schedule) > 0)
                         @foreach ($project->schedule as $schedule)
-                            <div id="scheduleList"></div>
                             <div
                                 class="h-max min-w-60  md:min-w-72 inline-block pb-2 mr-4 bg-slate-400/20 rounded-lg relative inset-0">
                                 <div class="flex items-center justify-between p-2 px-3" x-data="{ show: false }">
@@ -379,7 +378,7 @@
                     {{-- ------------------ Add List ----------------------- --}}
 
                     <div id="addList"
-                        class="cursor-pointer min-w-60 md:min-w-72 flex items-center h-max py-2.5 mt-1 border-2 border-dashed px-3 rounded-lg border-slate-400 hover:bg-slate-200/20">
+                        class="cursor-pointer min-w-60 md:min-w-72 flex items-center h-max py-2.5 mt-1 border-2 border-dashed px-3 rounded-lg border-slate-400 hover:bg-slate-200/20 mr-3">
                         <span>
                             <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
                                 fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -392,8 +391,8 @@
                             Add list
                         </span>
                     </div>
-                    <div id="writeList" class="hidden bg-slate-400/20 h-fit p-2 rounded-lg min-w-60 md:min-w-72">
-                        <input type="text" id="taskTitle"
+                    <div id="writeList" class="hidden bg-slate-400/20 h-fit p-2 rounded-lg min-w-60 md:min-w-72 mr-3">
+                        <input type="text" id="taskTitle" required
                             class="w-full px-3 outline-none mb-2 block border-2 border-sky-600 py-0.5 rounded-md"
                             placeholder="Enter list title...">
                         <div class="flex items-center space-x-2">
@@ -415,51 +414,153 @@
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
 
     <script>
-        function loadSchedule(schedule) {
-            
-        }
-        $(document).ready(function() {
+        function fetchSchedule() {
             $.ajax({
                 type: "GET",
                 url: "{{ route('project', ['id' => $project->id]) }}",
                 success: function(response) {
+                    const schduelDivMain = $("#schduelDivMain");
+                    schduelDivMain.empty();
                     response.project.schedule.forEach(function(schedule) {
-                        console.log(schedule);
+                        // Main Div Of Schedule
+                        const schduelToAdd = $('<div>').addClass(
+                            'h-max min-w-60 md:min-w-72 inline-block pb-2 mr-4 bg-slate-400/20 rounded-lg relative inset-0'
+                        );
+
+                        // Schedule Title Div
+                        const schduelTitleDiv = $('<div>').addClass(
+                            'flex items-center justify-between p-2 px-3'
+                        ).attr('x-data', '{ show: false }');
+
+                        // Alpine div to delete the Schedule
+                        const schduleDelete = $('<div>').addClass(
+                            'absolute cursor-pointer bg-white block py-1 w-64 rounded-md top-10 left-4 z-50 shadow-lg'
+                        ).attr('x-show', 'show').css('display', 'none');
+
+                        const schduleDeleteText = $('<div>').addClass(
+                            'hover:bg-slate-400/15 py-1 px-4 text-gray-500').text(
+                            'Delete');
+
+                        // Schedule Title
+                        const schduleTitleSpan = $('<span>').addClass(
+                            'text-gray-600 font-semibold').text(schedule.title);
+
+                        // Toggle button for showing/hiding delete option
+                        const schduleToggleSpan = $('<span>').addClass(
+                            'text-gray-600 font-semibold py-1 px-2 rounded-md hover:bg-slate-300 cursor-pointer'
+                        ).attr('x-on:click', 'show = !show');
+                        const toggleIcon =
+                            `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="w-5" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" stroke="#000000" fill="none" stroke-width="1.5px"></path></svg>`;
+
+                        schduleToggleSpan.append(toggleIcon);
+
+                        // Task Div
+                        const taskDiv = $("<div>").addClass(
+                            'overflow-y-auto px-2 max-h-80 min-h-0');
+
+                        // Button to add new task
+
+                        const addTaskDiv = $("<div>").addClass(
+                            'cursor-pointer hover:bg-slate-500/20 mt-3 mx-1 px-2 py-[6px] rounded-md flex items-center addTask'
+                        ).append(
+                            `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-4 w-4" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" stroke="#6B8291" fill="none" stroke-width="1.5px"></path></svg>`
+                        ).append(
+                            $('<div>').text('Add Task').addClass('ml-2 text-gray-500')
+                        );
+
+                        // The final structure
+                        schduleDelete.append(schduleDeleteText);
+                        schduelTitleDiv.append(schduleDelete);
+                        schduelTitleDiv.append(schduleTitleSpan);
+                        schduelTitleDiv.append(schduleToggleSpan);
+                        schduelToAdd.append(schduelTitleDiv);
+                        schduelToAdd.append(taskDiv);
+                        schduelToAdd.append(addTaskDiv);
+                        $("#schduelDivMain").append(schduelToAdd);
+                    });
+
+                    const writeListDiv = $("<div>").attr('id', 'writeList').addClass(
+                        'hidden bg-slate-400/20 h-fit p-2 rounded-lg min-w-60 md:min-w-72 mr-3'
+                    ).append(
+                        $('<input>').attr({
+                            type: 'text',
+                            id: 'taskTitle',
+                            required: true,
+                            class: 'w-full px-3 outline-none mb-2 block border-2 border-sky-600 py-0.5 rounded-md',
+                            placeholder: 'Enter list title...'
+                        })
+                    ).append(
+                        $('<div>').addClass('flex items-center space-x-2').append(
+                            $('<div>').attr('id', 'addNewList').addClass(
+                                'px-3 py-1 bg-blue-700 hover:bg-blue-600 text-white rounded-md font-bold cursor-pointer w-max'
+                            ).text('Add list')
+                        ).append(
+                            $('<div>').attr('id', 'cancelList').addClass(
+                                'font-semibold text-gray-500 hover:text-gray-800 cursor-pointer'
+                            ).text('Cancel')
+                        )
+                    );
+
+
+                    // Add list button
+                    const addListDiv = $("<div>").attr('id', 'addList').addClass(
+                        'cursor-pointer min-w-60 md:min-w-72 flex items-center h-max py-2.5 mt-1 border-2 border-dashed px-3 rounded-lg border-slate-400 hover:bg-slate-200/20 mr-3'
+                    ).append(
+                        $('<span>').append(
+                            `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-4 w-4" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" stroke="#6B7280" fill="none" stroke-width="1.5px"></path></svg>`
+                        )
+                    ).append(
+                        $('<span>').addClass('text-gray-500 text-[15px] ml-2').text('Add list')
+                    );
+
+                    schduelDivMain.append(addListDiv);
+
+                    // Append writeListDiv before the "Add list" button
+                    schduelDivMain.append(writeListDiv);
+
+                    $('#addList').on('click', function() {
+                        toggleVisibility('#addList', '#writeList');
+                    });
+
+                    $('#cancelList').on('click', function() {
+                        toggleVisibility('#writeList', '#addList');
                     });
                 },
                 error: function(xhr, status, error) {
                     console.error("An error occurred:", error);
                 }
             });
-        });
-
-
-
-
+        }
+        // Toggle visibility function
+        function toggleVisibility(hideSelector, showSelector) {
+            $(hideSelector).hide();
+            $(showSelector).show();
+        }
+        fetchSchedule();
         $(document).on('click', '#addNewList', function() {
             const taskTitle = $("#taskTitle").val();
             const projectId = {{ $project->id }};
-            // console.log(projectId, taskTitle);
-            $.ajax({
-                type: "POST",
-                url: "{{ route('schedule.create') }}",
-                data: {
-                    project_id: projectId,
-                    title: taskTitle,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function(xhr, status, error) {
-                    console.error("An error occurred:", error);
-                }
-            });
+            if (taskTitle === '') {
+                alert("Title Can't Be Empty");
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('schedule.create') }}",
+                    data: {
+                        project_id: projectId,
+                        title: taskTitle,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        fetchSchedule();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("An error occurred:", error);
+                    }
+                });
+            }
         });
-
-
-
-
 
 
 
