@@ -1,13 +1,12 @@
 <x-app-layout>
     {{-- ------------------Loader----------------------- --}}
 
-    {{-- <x-loader /> --}}
+    <x-loader />
 
     {{-- ------------------Page Main Content----------------------- --}}
 
     <div class="h-full py-6 px-4 md:px-8 pb-4 md:pb-12">
         <section class="grid h-full grid-rows-[auto_1fr] gap-4">
-
             {{-- ------------------Hearder----------------------- --}}
             <header class="flex items-center flex-wrap gap-2 md:gap-0">
                 <div class="relative flex items-center" x-data="{ open: false }">
@@ -192,7 +191,6 @@
                     </div>
                 </div>
             </header>
-
             {{-- --------------------Task's Lists----------------------- --}}
             <main class="relative">
                 <div class="absolute inset-0 select-none overflow-x-auto overflow-y-hidden whitespace-nowrap transition-opacity flex"
@@ -423,7 +421,7 @@
                         </div>
                     </div>
                     <div class="flex justify-end items-center py-3 gap-x-2 bg-slate-400/15 px-4">
-                        <x-primary-button data-ldcv-set="">
+                        <x-primary-button data-ldcv-set="No">
                             Cancel
                         </x-primary-button>
                         <div
@@ -439,29 +437,18 @@
     <x-taskModal :taskDetails="true" />
     <script src="{{ asset('assets/js/index.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
-
     <script>
-        // Pass the current SchduleDelete Id to modal delete button
-        $(document).on('click', '.deleteSchedule', function() {
-            console.log($(this));
-            const id = $(this).data('Delete_id');
-            console.log(id);
-            $('.yesDeleteSchdule').data('id', id);
-        });
-
         $(document).on('click', '.yesDeleteSchdule', function() {
-            const toDeleteSchedule = $(this).data('id');
-            console.log("Deleting schedule ID:", toDeleteSchedule);
             $.ajax({
                 type: "DELETE",
-                url: `{{ route('schedule.delete', ['id' => ':id']) }}`.replace(':id',
-                    toDeleteSchedule),
+                url: `{{ route('schedule.delete', ['id' => ':id']) }}`.replace(':id', $("#scheduleDelete")
+                    .data('deleteId')),
                 data: {
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
                     console.log(response);
-                    fetchSchedule()
+                    fetchSchedule();
                 }
             });
         });
@@ -491,7 +478,7 @@
 
                         const schduleDeleteText = $('<div>').addClass(
                             'hover:bg-slate-400/15 py-1 px-4 text-gray-500 deleteSchedule'
-                        ).data('Delete_id', schedule.id).text('Delete');
+                        ).data('delete_id', schedule.id).text('Delete');
 
                         // Schedule Title
                         const scheduleTitle = schedule.title;

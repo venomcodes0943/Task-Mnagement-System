@@ -19,7 +19,6 @@
     <div class="min-h-screen flex bg-gray-200 relative overflow-hidden">
         <div id="sidebar"
             class="w-64 absolute inset-y-0 left-0 transform translate-x-0 bg-slate-800 transition-transform duration-300 ease-in-out z-20">
-
             <div class="w-full py-[9.5px] border-b border-slate-50/15 h-max">
                 <div class="flex items-center gap-x-2 px-3">
                     <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
@@ -122,7 +121,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-3 h-96" x-show='show' x-transition>
+                    <div class="mt-3 h-[360px]" x-show='show' x-transition>
                         @if (count(app('Projects')) > 0)
                             @foreach (app('Projects') as $project)
                                 @php

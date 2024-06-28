@@ -80,7 +80,8 @@ if (scheduleDelete) {
     if (modals) {
         modals.forEach(modal => {
             modal.addEventListener('click', function () {
-                console.log(this);
+                const deleteId = $(this).data('delete_id');
+                scheduleDelete.dataset.deleteId = deleteId;
                 ldcv.toggle();
             });
         });
