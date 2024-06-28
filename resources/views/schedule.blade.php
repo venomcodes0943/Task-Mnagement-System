@@ -86,8 +86,8 @@
                 <div class="ldcv" id="memberModal">
                     <div class="base">
                         <div class="inner">
-                            <div class="max-w-[750px] md:w-[750px] max-h-[590px] overflow-auto">
-                                <div class="px-6 pb-7 pt-6">
+                            <div class="max-w-[750px] md:w-[550px] lg:w-[750px] max-h-[590px] overflow-auto">
+                                <div class="px-4 pb-7 pt-6">
                                     <div class="mb-4 flex items-center justify-between">
                                         <div class="font-bold text-xl">Team Members (5)</div>
                                         <span class="cursor-pointer hover:bg-slate-300 p-1 rounded" data-ldcv-set="">
@@ -116,65 +116,60 @@
                                             class="w-full border-b border-slate-300 placeholder:font-semibold outline-none pl-4 text-gray-800 pb-2"
                                             placeholder="Search">
                                         <div class="max-h-52 md:max-h-64 overflow-y-auto w-full">
-                                            <div class="flex items-center justify-between border-b pb-2 px-3 py-2">
-                                                <div class="flex items-center">
+                                            <div
+                                                class="flex items-start md:items-center justify-between border-b pb-2 px-1 py-2">
+                                                <div
+                                                    class="pl-2 md:pl-0 flex flex-col md:flex-row items-start md:items-center">
                                                     <x-userPicture class="w-6 h-6" :about="'Admin'"
                                                         :users="__(
                                                             'https://images.unsplash.com/photo-1555952517-2e8e729e0b44?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                                                         )" />
-                                                    <div class="pl-2">
+                                                    <div class="md:pl-2 mt-2 md:mt-0">
                                                         <div class="text-sm font-bold">Haseeb</div>
                                                         <div class="text-sm text-gray-600">dhcodes0943@gmail.com</div>
                                                     </div>
                                                 </div>
                                                 <x-checkbox />
                                             </div>
-                                            <div class="flex items-center justify-between border-b pb-2 px-3 py-2">
-                                                <div class="flex items-center">
+                                            <div
+                                                class="flex items-start md:items-center justify-between border-b pb-2 px-1 py-2">
+                                                <div
+                                                    class="pl-2 md:pl-0 flex flex-col md:flex-row items-start md:items-center">
                                                     <x-userPicture class="w-6 h-6" :about="'Admin'"
                                                         :users="__(
                                                             'https://images.unsplash.com/photo-1555952517-2e8e729e0b44?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                                                         )" />
-                                                    <div class="pl-2">
+                                                    <div class="md:pl-2 mt-2 md:mt-0">
                                                         <div class="text-sm font-bold">Haseeb</div>
                                                         <div class="text-sm text-gray-600">dhcodes0943@gmail.com</div>
                                                     </div>
                                                 </div>
                                                 <x-checkbox />
                                             </div>
-                                            <div class="flex items-center justify-between border-b pb-2 px-3 py-2">
-                                                <div class="flex items-center">
+                                            <div
+                                                class="flex items-start md:items-center justify-between border-b pb-2 px-1 py-2">
+                                                <div
+                                                    class="pl-2 md:pl-0 flex flex-col md:flex-row items-start md:items-center">
                                                     <x-userPicture class="w-6 h-6" :about="'Admin'"
                                                         :users="__(
                                                             'https://images.unsplash.com/photo-1555952517-2e8e729e0b44?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                                                         )" />
-                                                    <div class="pl-2">
+                                                    <div class="md:pl-2 mt-2 md:mt-0">
                                                         <div class="text-sm font-bold">Haseeb</div>
                                                         <div class="text-sm text-gray-600">dhcodes0943@gmail.com</div>
                                                     </div>
                                                 </div>
                                                 <x-checkbox />
                                             </div>
-                                            <div class="flex items-center justify-between border-b pb-2 px-3 py-2">
-                                                <div class="flex items-center">
+                                            <div
+                                                class="flex items-start md:items-center justify-between border-b pb-2 px-1 py-2">
+                                                <div
+                                                    class="pl-2 md:pl-0 flex flex-col md:flex-row items-start md:items-center">
                                                     <x-userPicture class="w-6 h-6" :about="'Admin'"
                                                         :users="__(
                                                             'https://images.unsplash.com/photo-1555952517-2e8e729e0b44?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                                                         )" />
-                                                    <div class="pl-2">
-                                                        <div class="text-sm font-bold">Haseeb</div>
-                                                        <div class="text-sm text-gray-600">dhcodes0943@gmail.com</div>
-                                                    </div>
-                                                </div>
-                                                <x-checkbox />
-                                            </div>
-                                            <div class="flex items-center justify-between pb-2 px-3 py-2">
-                                                <div class="flex items-center">
-                                                    <x-userPicture class="w-6 h-6" :about="'Admin'"
-                                                        :users="__(
-                                                            'https://images.unsplash.com/photo-1555952517-2e8e729e0b44?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                                                        )" />
-                                                    <div class="pl-2">
+                                                    <div class="md:pl-2 mt-2 md:mt-0">
                                                         <div class="text-sm font-bold">Haseeb</div>
                                                         <div class="text-sm text-gray-600">dhcodes0943@gmail.com</div>
                                                     </div>
@@ -407,6 +402,38 @@
             </main>
         </section>
     </div>
+    <div class="ldcv" id="scheduleDelete">
+        <div class="base">
+            <div class="inner">
+                <div class="max-w-[750px] md:w-[550px] max-h-[590px] overflow-auto">
+                    <div class="flex flex-col md:flex-row items-center md:items-start pt-5 pb-4 px-4">
+                        <div class="p-2 bg-red-200 rounded-full w-10 h-10 flex items-center justify-center">
+                            <svg xmlns:xlink="http://www.w3.org/1999/xlink" class="h-6 w-6 text-red-600"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" width="24" height="24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2px"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                                    stroke="#DC2626" fill="none"></path>
+                            </svg>
+                        </div>
+                        <div class="pl-0 md:pl-5 pt-2 md:pt-0">
+                            <div class="md:text-xl text-black">Delete Resource</div>
+                            <div class="text-gray-500 text-sm">Are you sure you want to delete this resource?
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end items-center py-3 gap-x-2 bg-slate-400/15 px-4">
+                        <x-primary-button data-ldcv-set="">
+                            Cancel
+                        </x-primary-button>
+                        <div
+                            class="cursor-pointer bg-red-600 rounded-md font-semibold outline-none px-4 py-1.5 active:shadow-md text-white yesDeleteSchdule">
+                            Delete</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {{-- Task Modal --}}
     <x-taskModal :taskDetails="true" />
@@ -414,6 +441,31 @@
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
 
     <script>
+        // Pass the current SchduleDelete Id to modal delete button
+        $(document).on('click', '.deleteSchedule', function() {
+            console.log($(this));
+            const id = $(this).data('Delete_id');
+            console.log(id);
+            $('.yesDeleteSchdule').data('id', id);
+        });
+
+        $(document).on('click', '.yesDeleteSchdule', function() {
+            const toDeleteSchedule = $(this).data('id');
+            console.log("Deleting schedule ID:", toDeleteSchedule);
+            $.ajax({
+                type: "DELETE",
+                url: `{{ route('schedule.delete', ['id' => ':id']) }}`.replace(':id',
+                    toDeleteSchedule),
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    console.log(response);
+                    fetchSchedule()
+                }
+            });
+        });
+
         function fetchSchedule() {
             $.ajax({
                 type: "GET",
@@ -434,16 +486,20 @@
 
                         // Alpine div to delete the Schedule
                         const schduleDelete = $('<div>').addClass(
-                            'absolute cursor-pointer bg-white block py-1 w-64 rounded-md top-10 left-4 z-50 shadow-lg'
+                            'absolute cursor-pointer bg-white block py-1 w-52 md:w-64 rounded-md top-10 left-4 z-50 shadow-lg'
                         ).attr('x-show', 'show').css('display', 'none');
 
                         const schduleDeleteText = $('<div>').addClass(
-                            'hover:bg-slate-400/15 py-1 px-4 text-gray-500').text(
-                            'Delete');
+                            'hover:bg-slate-400/15 py-1 px-4 text-gray-500 deleteSchedule'
+                        ).data('Delete_id', schedule.id).text('Delete');
 
                         // Schedule Title
+                        const scheduleTitle = schedule.title;
+                        const truncatedTitle = scheduleTitle.length > 15 ? scheduleTitle.slice(
+                                0, 15) +
+                            '...' : scheduleTitle;
                         const schduleTitleSpan = $('<span>').addClass(
-                            'text-gray-600 font-semibold').text(schedule.title);
+                            'text-gray-600 font-semibold').text(truncatedTitle);
 
                         // Toggle button for showing/hiding delete option
                         const schduleToggleSpan = $('<span>').addClass(
@@ -482,9 +538,11 @@
                     const writeListDiv = $("<div>").attr('id', 'writeList').addClass(
                         'hidden bg-slate-400/20 h-fit p-2 rounded-lg min-w-60 md:min-w-72 mr-3'
                     ).append(
+                        $('<span>').addClass('w-full px-1 text-red-500 font-bold hidden').text(
+                            'Field Can\'t Be Empty').attr('id', 'errormsg'),
                         $('<input>').attr({
                             type: 'text',
-                            id: 'taskTitle',
+                            id: 'schduleTitle',
                             required: true,
                             class: 'w-full px-3 outline-none mb-2 block border-2 border-sky-600 py-0.5 rounded-md',
                             placeholder: 'Enter list title...'
@@ -524,6 +582,7 @@
 
                     $('#cancelList').on('click', function() {
                         toggleVisibility('#writeList', '#addList');
+                        $("#errormsg").hide();
                     });
                 },
                 error: function(xhr, status, error) {
@@ -536,19 +595,22 @@
             $(hideSelector).hide();
             $(showSelector).show();
         }
+
         fetchSchedule();
+
+        // Add new Record
         $(document).on('click', '#addNewList', function() {
-            const taskTitle = $("#taskTitle").val();
+            const schduleTitle = $("#schduleTitle").val();
             const projectId = {{ $project->id }};
-            if (taskTitle === '') {
-                alert("Title Can't Be Empty");
+            if (schduleTitle === '') {
+                $("#errormsg").show();
             } else {
                 $.ajax({
                     type: "POST",
                     url: "{{ route('schedule.create') }}",
                     data: {
                         project_id: projectId,
-                        title: taskTitle,
+                        title: schduleTitle,
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
@@ -561,8 +623,6 @@
                 });
             }
         });
-
-
 
         function getProject() {
             let url = "/project/" + {{ $project->id }};

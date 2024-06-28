@@ -72,6 +72,21 @@ if (memberModal) {
     }
 }
 
+const scheduleDelete = document.querySelector('#scheduleDelete');
+
+if (scheduleDelete) {
+    const ldcv = new ldcover({ root: scheduleDelete });
+    const modals = document.querySelectorAll('.deleteSchedule');
+    if (modals) {
+        modals.forEach(modal => {
+            modal.addEventListener('click', function () {
+                console.log(this);
+                ldcv.toggle();
+            });
+        });
+    }
+}
+
 
 
 

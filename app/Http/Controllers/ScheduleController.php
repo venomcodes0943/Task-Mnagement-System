@@ -21,4 +21,20 @@ class ScheduleController extends Controller
             return response()->json(['message' => 'Failed to add schedule', 'error' => $e->getMessage()], 500);
         }
     }
+
+
+
+
+    public function destroy($id)
+    {
+        try {
+            $schedule = Schedule::findOrFail($id);
+            $schedule->delete();
+
+            return response()->json(['message' => 'Schedule Deleted Successfully'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to Delete schedule', 'error' => $e->getMessage()], 500);
+        }
+    }
+
 }

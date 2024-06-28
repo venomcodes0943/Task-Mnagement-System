@@ -27,4 +27,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('project/update/{id}', [ProjectController::class, 'update'])->name('project.update');
 
     Route::post('schedule/create', [ScheduleController::class, 'create'])->name('schedule.create');
+    Route::delete('schedule/delete/{id}', [ScheduleController::class, 'destroy'])->name('schedule.delete');
 });

@@ -27,7 +27,7 @@
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
             x-transition:leave="transition-opacity ease-in duration-100" x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="w-[185px] absolute top-8 right-11 bg-white shadow-lg border rounded-md" style="display: none;">
+            class="w-[185px] absolute top-8 right-11 z-30 bg-white shadow-lg border rounded-md" style="display: none;">
             <div class="py-1 border-b">
                 {{ $slot }}
             </div>
