@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('schedule_id')->constrained()->onDelete('cascade');
             $table->string('taskTitle');
-            $table->string('description');
-            $table->string('dueDate');
+            $table->string('description')->nullable();
+            $table->string('dueDate')->nullable();
             $table->string('assignTo')->nullable();
             $table->string('schedule');
             $table->boolean('completed')->nullable()->default(false);

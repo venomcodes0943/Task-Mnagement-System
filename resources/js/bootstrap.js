@@ -73,10 +73,6 @@ if (memberModal) {
 }
 
 
-
-
-
-
 // Sidebar Handleing
 
 document.getElementById('btn').addEventListener('click', function () {

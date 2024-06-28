@@ -13,7 +13,7 @@ class ProjectServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton('Projects', function () {
-            return Project::all();
+            return Project::where('archived',0)->get();
         });
     }
 

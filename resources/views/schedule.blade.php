@@ -612,13 +612,14 @@
     </script>
     <script>
         let ldcv;
+
         function setupModal() {
             const scheduleDelete = document.querySelector('#scheduleDelete');
             if (scheduleDelete) {
                 ldcv = new ldcover({
                     root: scheduleDelete
                 });
-                // Use event delegation to handle click events on dynamically created elements
+                // Event delegation to handle click events on dynamically created elements
                 $(document).on('click', '.deleteSchedule', function() {
                     const deleteId = $(this).data('delete_id');
                     scheduleDelete.dataset.deleteId = deleteId;
@@ -677,14 +678,43 @@
                             'overflow-y-auto px-2 max-h-80 min-h-0');
 
                         // Button to add new task
-
                         const addTaskDiv = $("<div>").addClass(
-                            'cursor-pointer hover:bg-slate-500/20 mt-3 mx-1 px-2 py-[6px] rounded-md flex items-center addTask'
+                            'cursor-pointer hover:bg-slate-500/20 mt-3 mx-2 px-2 py-[6px] rounded-md flex items-center addTask'
                         ).append(
                             `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-4 w-4" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" stroke="#6B8291" fill="none" stroke-width="1.5px"></path></svg>`
                         ).append(
                             $('<div>').text('Add Task').addClass('ml-2 text-gray-500')
                         );
+
+                        // Add Task textarea
+                        const addTask = $("<div>").addClass('rounded-md border w-full writetask px-1')
+                            .css('display', 'none');
+                        const taskTextArea = $("<textarea>").addClass(
+                            'rounded-lg px-3 pt-1 outline-none block w-full resize-none text-gray-600 placeholder:text-gray-500 border-2 border-sky-500 pb-3'
+                        ).attr('placeholder', 'Enter Task...');
+                        const taskAddCancelButtons = $("<div>").addClass("flex items-center mt-2");
+                        const addTaskButton = $("<div>").addClass(
+                            'bg-blue-600 rounded-md text-white hover:bg-sky-500 px-2 py-1 cursor-pointer font-semibold text-sm'
+                        ).text("Add Task");
+                        const cancelButton = $("<button>").addClass(
+                            'outline-none px-2 font-bold text-sm cancelTask').text('Cancel').click(
+                            function() {
+                                const index = $('.cancelTask').index(this);
+                                $('.addTask').eq(index).show();
+                                $('.writetask').eq(index).hide();
+                            });
+
+                        addTask.append(taskTextArea);
+                        addTask.append(taskAddCancelButtons);
+                        taskAddCancelButtons.append(addTaskButton);
+                        taskAddCancelButtons.append(cancelButton);
+
+
+                        $(document).on('click', ".addTask", function() {
+                            var index = $('.addTask').index(this);
+                            $('.addTask').eq(index).hide();
+                            $('.writetask').eq(index).show();
+                        });
 
                         // The final structure
                         schduleDelete.append(schduleDeleteText);
@@ -694,6 +724,7 @@
                         schduelToAdd.append(schduelTitleDiv);
                         schduelToAdd.append(taskDiv);
                         schduelToAdd.append(addTaskDiv);
+                        schduelToAdd.append(addTask);
                         $("#schduelDivMain").append(schduelToAdd);
                     });
 
@@ -721,7 +752,6 @@
                         )
                     );
 
-
                     // Add list button
                     const addListDiv = $("<div>").attr('id', 'addList').addClass(
                         'cursor-pointer min-w-60 md:min-w-72 flex items-center h-max py-2.5 mt-1 border-2 border-dashed px-3 rounded-lg border-slate-400 hover:bg-slate-200/20 mr-3'
@@ -746,6 +776,7 @@
                         toggleVisibility('#writeList', '#addList');
                         $("#errormsg").hide();
                     });
+
                     setupModal();
                 },
                 error: function(xhr, status, error) {
@@ -753,12 +784,12 @@
                 }
             });
         }
+
         // Toggle visibility function
         function toggleVisibility(hideSelector, showSelector) {
             $(hideSelector).hide();
             $(showSelector).show();
         }
-
         fetchSchedule();
 
         $(document).on('click', '.yesDeleteSchdule', function() {
