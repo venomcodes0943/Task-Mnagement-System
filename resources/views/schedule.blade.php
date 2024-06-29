@@ -611,19 +611,19 @@
         }.call(this);
     </script>
     <script>
-        let ldcv;
+        let ldcvDeleteModal;
 
         function setupModal() {
             const scheduleDelete = document.querySelector('#scheduleDelete');
             if (scheduleDelete) {
-                ldcv = new ldcover({
+                ldcvDeleteModal = new ldcover({
                     root: scheduleDelete
                 });
                 // Event delegation to handle click events on dynamically created elements
                 $(document).on('click', '.deleteSchedule', function() {
                     const deleteId = $(this).data('delete_id');
                     scheduleDelete.dataset.deleteId = deleteId;
-                    ldcv.toggle();
+                    ldcvDeleteModal.toggle();
                 });
             }
         }
@@ -803,7 +803,7 @@
                 success: function(response) {
                     console.log(response);
                     fetchSchedule();
-                    ldcv.toggle();
+                    ldcvDeleteModal.toggle();
                     $("#scheduleDelete").removeData('deleteId')
                 }
             });
@@ -859,6 +859,7 @@
                 },
                 success: function(response) {
                     getProject();
+                    fetchSideProjects();
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);

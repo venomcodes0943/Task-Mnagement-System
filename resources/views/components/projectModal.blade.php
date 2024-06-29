@@ -41,6 +41,7 @@
                         </label>
                     @endforeach
                 </div>
+                <div class="text-red-500 font-bold pb-2 hidden" id="projectError">Fields can't be empty</div>
             </div>
             <div class="bg-slate-300/20 py-5 px-6 flex items-center justify-end space-x-2">
                 <x-primary-button data-ldcv-set="" type="button" id="cancelBtn">

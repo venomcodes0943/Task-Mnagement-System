@@ -100,16 +100,18 @@
                             <span class="text-slate-400 font-bold text-sm">Projects</span>
                         </div>
                         <div class="flex items-center gap-x-2">
-                            <div class="cursor-pointer hover:bg-slate-100/15 p-1 rounded">
-                                <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                    aria-hidden="true" data-slot="icon" class="h-3.5 w-3.5" width="24"
-                                    height="24">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776"
-                                        stroke="#6B7280" fill="none" stroke-width="1.5px"></path>
-                                </svg>
-                            </div>
+                            <a href="{{ route('projects') }}">
+                                <div class="cursor-pointer hover:bg-slate-100/15 p-1 rounded">
+                                    <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                        aria-hidden="true" data-slot="icon" class="h-3.5 w-3.5" width="24"
+                                        height="24">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776"
+                                            stroke="#6B7280" fill="none" stroke-width="1.5px"></path>
+                                    </svg>
+                                </div>
+                            </a>
                             <div class="cursor-pointer hover:bg-slate-100/15 p-1 rounded openProjectModal">
                                 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -121,8 +123,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-3 h-[360px]" x-show='show' x-transition>
-                        @if (count(app('Projects')) > 0)
+                    <div class="mt-3 h-[360px] projectsContainer" x-show='show' x-transition id="">
+                        {{-- @if (count(app('Projects')) > 0)
                             @foreach (app('Projects') as $project)
                                 @php
                                     $isActive = request()->routeIs('project') && request()->route('id') == $project->id;
@@ -139,7 +141,7 @@
                             <div class="text-white ml-4 font-bold">
                                 No Projects
                             </div>
-                        @endif
+                        @endif --}}
                     </div>
                 </div>
             </div>
@@ -190,7 +192,363 @@
             {{ $slot }}
         </div>
     </div>
+
     <x-projectModal />
+    <script>
+        ! function() {
+            var s, o;
+
+            function n(t, e) {
+                var n, r = {}.hasOwnProperty;
+                for (n in e) r.call(e, n) && (t[n] = e[n]);
+                return t
+            }
+            s = function(t, e, n) {
+                var r;
+                for (null == n && (n = document), r = t; r && r !== n;) r = r.parentNode;
+                if (r !== n) return null;
+                for (r = t; r && r !== n && r.matches && !r.matches(e);) r = r.parentNode;
+                return r !== n || n.matches && n.matches(e) ? r : null
+            }, (o = function(t) {
+                var e;
+                return null == t && (t = {}), this.evtHandler = {}, this.opt = n({
+                        delay: 300,
+                        autoZ: !0,
+                        baseZ: 3e3,
+                        escape: !0,
+                        byDisplay: !0
+                    }, t), t.zmgr && this.zmgr(t.zmgr), this.promises = [], this._r = t.root ? "string" == typeof t
+                    .root ? document.querySelector(t.root) : t.root : ((e = document.createElement("div"))
+                        .innerHTML = '<div class="base"></div>', e), this.cls = "string" == typeof t.type ? t.type
+                    .split(" ") : t.type, this.resident = null != t.resident && t.resident, this.inPlace = null == t
+                    .inPlace || t.inPlace, this.container = "string" == typeof t.container ? document.querySelector(
+                        t.container) : t.container, this._r.content && this._r.content.nodeType === Element
+                    .DOCUMENT_FRAGMENT_NODE || this.init(), this
+            }).prototype = n(Object.create(Object.prototype), {
+                root: function() {
+                    return this.inited || this.init(), this._r
+                },
+                init: function() {
+                    var t, r, i = this;
+                    if (!this.inited) return this.inited = !0, this.inPlace || (this._r.parentNode.removeChild(
+                            this._r), document.body.appendChild(this._r)), !this.resident && this._r
+                        .parentNode && (this._c = document.createComment(" ldcover placeholder "), this._r
+                            .parentNode.insertBefore(this._c, this._r), this._r.parentNode.removeChild(this
+                                ._r)), this._r.content && this._r.content.nodeType === Element
+                        .DOCUMENT_FRAGMENT_NODE && (this._r = this._r.content.cloneNode(!0).childNodes[0],
+                            this._r.parentNode.removeChild(this._r)), (t = this._r.getAttribute(
+                            "data-lock")) && "true" === t && (this.opt.lock = !0), this.inner = this._r
+                        .querySelector(".inner"), this.base = this._r.querySelector(".base"), this._r
+                        .classList.add.apply(this._r.classList, ["ldcv"].concat(this.cls || [])), this.opt
+                        .byDisplay && (this._r.style.display = "none"), r = null, this._r.addEventListener(
+                            "mousedown", this.el_md = function(t) {
+                                return r = t.target
+                            }), this._r.addEventListener("click", this.el_c = function(t) {
+                            var e, n;
+                            return r !== i._r || i.opt.lock ? s(t.target, "*[data-ldcv-cancel]", i._r) ?
+                                (t.stopPropagation(), i.cancel()) : (e = s(t.target, "*[data-ldcv-set]",
+                                    i._r)) && null != (n = e.getAttribute("data-ldcv-set")) && !s(e,
+                                    ".disabled", i._r) ? (t.stopPropagation(), i.set(n)) : void 0 : (t
+                                    .stopPropagation(), i.toggle(!1))
+                        })
+                },
+                zmgr: function(t) {
+                    return null != t ? this._zmgr = t : this._zmgr
+                },
+                append: function(t) {
+                    var e = this._r.childNodes[0];
+                    return (e && e.classList.contains("base") ? e : this._r).appendChild(t)
+                },
+                get: function(n) {
+                    var r = this;
+                    return new Promise(function(t, e) {
+                        return r.promises.push({
+                            res: t,
+                            rej: e
+                        }), r.toggle(!0, n)
+                    })
+                },
+                cancel: function(e, t) {
+                    if (null == t && (t = !0), this.promises.splice(0).map(function(t) {
+                            return t.rej(e || ((t = new Error).name = "lderror", t.id = 999, t))
+                        }), t) return this.toggle(!1)
+                },
+                set: function(e, t) {
+                    if (null == t && (t = !0), this.promises.splice(0).map(function(t) {
+                            return t.res(e)
+                        }), t) return this.toggle(!1)
+                },
+                isOn: function() {
+                    return this._r.classList.contains("active")
+                },
+                lock: function() {
+                    return this.opt.lock = !0
+                },
+                toggle: function(r, i) {
+                    var s = this;
+                    return new Promise(function(e, t) {
+                        var n;
+                        return s.inited || s.init(), r && null != i && s.fire("data", i), null == r && s
+                            ._r.classList.contains("running") || null != r && s._r.classList.contains(
+                                "active") === !!r ? e() : ((n = null != r ? r : !s._r.classList
+                                    .contains("active")) && !s._r.parentNode && (null == s.container &&
+                                    s._c && s._c.parentNode ? s._c.parentNode.insertBefore(s._r, s._c) :
+                                    (s.container || document.body).appendChild(s._r)), s._r.classList
+                                .add("running"), s.opt.byDisplay && (s._r.style.display = "block"), s._r
+                                .classList.contains("inline") && (n ? (s.el_h = function(t) {
+                                    if (!s._r.contains(t.target)) return s.toggle(!1)
+                                }, window.addEventListener("click", s.el_h)) : s.el_h && (window
+                                    .removeEventListener("click", s.el_h), s.el_h = null)), !n && s
+                                .el_esc && (document.removeEventListener("keyup", s.el_esc), s.el_esc =
+                                    null), setTimeout(function() {
+                                    var t;
+                                    return s._r.classList.toggle("active", n), !s.opt.lock && s.opt
+                                        .escape && n && !s.el_esc && (s.el_esc = function(t) {
+                                            if (27 === t.keyCode && (t = o.popups)[t.length -
+                                                    1] === s) return s.toggle(!1)
+                                        }, document.addEventListener("keyup", s.el_esc)), s.opt
+                                        .animation && s.inner && s.inner.classList[n ? "add" :
+                                            "remove"].apply(s.inner.classList, s.opt.animation
+                                            .split(" ")), n ? o.popups.push(s) : 0 <= (t = o.popups
+                                            .indexOf(s)) && o.popups.splice(t, 1), s.opt.autoZ && (
+                                            n ? s._r.style.zIndex = s.z = (s._zmgr || o._zmgr).add(s
+                                                .opt.baseZ) : ((s._zmgr || o._zmgr).remove(s.z),
+                                                delete s.z)), s.opt.transformFix && !n && s._r
+                                        .classList.remove("shown"), setTimeout(function() {
+                                            return s._r.classList.remove("running"), s.opt
+                                                .transformFix && n && s._r.classList.add(
+                                                    "shown"), !n && s.opt.byDisplay && (s._r
+                                                    .style.display = "none"), n || !s._r
+                                                .parentNode || s.resident || s._r.parentNode
+                                                .removeChild(s._r), !n && s.opt.autoZ && (s._r
+                                                    .style.zIndex = ""), s.fire("toggled." + (
+                                                    n ? "on" : "off"))
+                                        }, s.opt.delay), s.promises.length && !n && s.set(void 0, !
+                                            1), s.fire("toggle." + (n ? "on" : "off")), e()
+                                }, 50))
+                    })
+                },
+                on: function(t, n) {
+                    var r = this;
+                    return (Array.isArray(t) ? t : [t]).map(function(t) {
+                        var e;
+                        return ((e = r.evtHandler)[t] || (e[t] = [])).push(n)
+                    })
+                },
+                fire: function(t) {
+                    for (var e, n, r, i, s = [], o = [], l = 1, c = arguments.length; l < c; ++l) o.push(
+                        arguments[l]);
+                    for (e = o, l = 0, r = (n = this.evtHandler[t] || []).length; l < r; ++l) i = n[l], s.push(i
+                        .apply(this, e));
+                    return s
+                },
+                destroy: function(t) {
+                    var e = this;
+                    return null == t && (t = {}), this.toggle(!1).then(function() {
+                        return e._c && (t.removeNode || e._c.parentNode.insertBefore(e._r, e._c), e._c
+                            .parentNode.removeChild(e._c)), e._r.removeEventListener("mousedown", e
+                            .el_md), e._r.removeEventListener("click", e.el_c)
+                    })
+                }
+            }), n(o, {
+                popups: [],
+                _zmgr: {
+                    add: function(t) {
+                        return (this.s || (this.s = [])).push(t = Math.max(t || 0, ((t = this.s)[t.length -
+                            1] || 0) + 1)), t
+                    },
+                    remove: function(t) {
+                        if (!((t = (this.s || (this.s = [])).indexOf(t)) < 0)) return this.s.splice(t, 1)
+                    }
+                },
+                zmgr: function(t) {
+                    return null != t ? this._zmgr = t : this._zmgr
+                }
+            }), "undefined" != typeof module && null !== module ? module.exports = o : window && (window.ldcover = o)
+        }.call(this);
+    </script>
+
+    <script>
+        // Project Modal
+        let ldcvProjectModal;
+
+        const projectModal = document.querySelector('#projectModal');
+        if (projectModal) {
+            ldcvProjectModal = new ldcover({
+                root: projectModal
+            });
+            const modals = document.querySelectorAll('.openProjectModal');
+            if (modals) {
+                modals.forEach(modal => {
+                    modal.addEventListener('click', function() {
+                        ldcvProjectModal.toggle();
+                    });
+                });
+            }
+        }
+
+        function fetchSideProjects() {
+            $.ajax({
+                url: "{{ route('projects') }}",
+                type: 'GET',
+                success: function(data) {
+                    let projectsContainer = $('.projectsContainer');
+                    projectsContainer.empty();
+                    if (data.length > 0) {
+                        data.forEach(project => {
+                            if (project.archived === 0) {
+                                let projectHtml =
+                                    `<a href="/project/${project.id}"><x-sideList :title="'${project.name}'" :active="false" :project="'true'"><div class="w-3 h-3 py-1 rounded-full" style="background-color: ${project.color};"></div></x-sideList></a>`;
+                                projectsContainer.append(projectHtml);
+                            }
+                        });
+                    } else {
+                        projectsContainer.html(
+                            '<div class="text-white ml-4 font-bold">No Projects</div>');
+                    }
+                },
+                error: function(error) {
+                    console.log('Error fetching projects:', error);
+                }
+            });
+        }
+
+        // Fetch projects on page load
+        fetchSideProjects();
+
+        function fetchProjects() {
+            $.ajax({
+                url: "{{ route('projects') }}",
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    $('#projectListActive').empty();
+                    $('#projectListArchived').empty();
+                    let activeProjectCount = 0;
+                    let archivedProjectCount = 0;
+                    response.forEach(function(project) {
+                        if (project.archived === 0) {
+                            activeProjectCount++;
+                            const projectDiv = $('<div>').addClass(
+                                'flex items-center justify-between px-6 py-3 border-b');
+                            const projectLink = $('<a>').attr('href',
+                                "{{ route('project', '') }}/" + project.id).append(
+                                // Project Color Dot
+                                $('<div>').addClass('flex items-center').append(
+                                    $('<div>').addClass('w-2.5 h-2.5 rounded-full').css(
+                                        'background-color', project.color),
+                                    // Project Name
+                                    $('<div>').addClass(
+                                        'pl-3 text-gray-600 hover:underline').text(project
+                                        .name)
+                                )
+                            );
+
+                            const iconSpan = $('<span>')
+                                .addClass('cursor-pointer archivedIcon tooltip')
+                                .attr('data-tippy', 'Archived')
+                                .attr('id', project.id)
+                                .append(`
+                            <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                aria-hidden="true" data-slot="icon" class="h-4 w-4 group-hover:text-gray-800"
+                                width="24" height="24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"
+                                    stroke="#4B5563" fill="none" stroke-width="1.5px"></path>
+                            </svg>`);
+
+                            projectDiv.append(projectLink, iconSpan);
+                            $('#projectListActive').append(projectDiv);
+                        } else {
+                            archivedProjectCount++;
+                            const projectDiv = $('<div>')
+                                .addClass('flex items-center justify-between px-6 py-3 border-b');
+                            const projectLink = $('<a>')
+                                .attr('href', "{{ route('project', '') }}/" + project.id).append(
+                                    // Project Color Dot
+                                    $('<div>').addClass('flex items-center').append(
+                                        $('<div>').addClass('w-2.5 h-2.5 rounded-full').css(
+                                            'background-color', project.color),
+                                        // Project Name
+                                        $('<div>').addClass(
+                                            'pl-3 text-gray-600 hover:underline').text(project
+                                            .name)
+                                    )
+                                );
+
+                            const iconSpan = $('<span>')
+                                .addClass('cursor-pointer UnarchivedIcon tooltip')
+                                .attr('data-tippy', 'Archived')
+                                .attr('id', project.id)
+                                .append(
+                                    `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-4 w-4 cursor-pointer text-gray-600 hover:text-gray-900" width="24"  height="24" ><path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m6 4.125 2.25 2.25m0 0 2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" stroke="#4B5563" fill="none" stroke-width="1.5px"></path></svg>`
+                                );
+
+                            projectDiv.append(projectLink, iconSpan);
+                            $('#projectListArchived').append(projectDiv);
+                        }
+                    });
+                    if (activeProjectCount === 0) {
+                        $('#projectListActive').append(
+                            '<div class="pl-3 text-gray-600 my-4 font-bold text-center text-3xl">No Active Project</div>'
+                        );
+                    }
+                    if (archivedProjectCount === 0) {
+                        $('#projectListArchived').append(
+                            '<div class="pl-3 text-gray-600 my-4 font-bold text-center text-3xl">No Archived Project</div>'
+                        );
+                    }
+                },
+                error: function(error) {
+                    console.error('Error fetching projects:', error);
+                }
+            });
+        }
+        fetchProjects();
+
+        // Event listener for color selection
+        let selectedColor = null;
+        $(document).on('click', '.color-label', function() {
+            selectedColor = $(this).data("color");
+        })
+
+        // New Project Add
+        $(document).on('click', '#addNewProject', function(e) {
+            e.preventDefault();
+            const projectName = $("#name").val();
+            const projectColor = selectedColor;
+            if (projectName.trim() === '') {
+                $("#projectError").show()
+                setTimeout(() => {
+                    $("#projectError").hide()
+                }, 1500);
+            } else if (!selectedColor) {
+                $("#projectError").show()
+                setTimeout(() => {
+                    $("#projectError").hide()
+                }, 1500);
+            } else {
+                $.ajax({
+                    url: "{{ route('project.create') }}",
+                    type: "POST",
+                    data: {
+                        name: projectName,
+                        color: projectColor,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        fetchProjects();
+                        fetchSideProjects();
+                        ldcvProjectModal.toggle();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("An error occurred:", error);
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

@@ -43,22 +43,6 @@ if (taskModal) {
     }
 }
 
-// ProjectModal
-
-const projectModal = document.querySelector('#projectModal');
-
-if (projectModal) {
-    const ldcv = new ldcover({ root: projectModal });
-    const modals = document.querySelectorAll('.openProjectModal');
-    if (modals) {
-        modals.forEach(modal => {
-            modal.addEventListener('click', function () {
-                ldcv.toggle();
-            });
-        });
-    }
-}
-
 
 // Member Modal
 const memberModal = document.querySelector('#memberModal');
