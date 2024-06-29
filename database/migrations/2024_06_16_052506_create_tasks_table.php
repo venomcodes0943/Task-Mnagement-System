@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->string('description')->nullable();
             $table->string('dueDate')->nullable();
             $table->string('assignTo')->nullable();
-            $table->string('schedule');
             $table->boolean('completed')->nullable()->default(false);
             $table->timestamps();
         });

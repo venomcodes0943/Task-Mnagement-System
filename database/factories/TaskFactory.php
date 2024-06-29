@@ -23,7 +23,6 @@ class TaskFactory extends Factory
             'description' => fake()->sentence(),
             'dueDate' => fake()->dateTime(),
             'assignTo' => fake()->name(),
-            'schedule' => Schedule::query()->inRandomOrder()->value('title') ?? Schedule::factory()
         ];
     }
 }

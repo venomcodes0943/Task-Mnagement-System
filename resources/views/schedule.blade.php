@@ -5,7 +5,7 @@
 
     {{-- ------------------Page Main Content----------------------- --}}
 
-    <div class="h-full py-6 px-4 md:px-8 pb-4 md:pb-12">
+    <div class="h-full py-6 px-4 md:px-8 pb-4 md:pb-6">
         <section class="grid h-full grid-rows-[auto_1fr] gap-4">
             {{-- ------------------Hearder----------------------- --}}
             <header class="flex items-center flex-wrap gap-2 md:gap-0">
@@ -67,7 +67,7 @@
                         'https://images.unsplash.com/photo-1555952517-2e8e729e0b44?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                     )" />
                     <span
-                        class="tooltip tracking-tighter border-2 border-dashed  ml-1 p-1 rounded-full cursor-pointer openmember"
+                        class="overflow-ellipsis tooltip tracking-tighter border-2 border-dashed  ml-1 p-1 rounded-full cursor-pointer openmember"
                         data-tippy="Add/Remove Users">
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -194,212 +194,11 @@
             {{-- --------------------Task's Lists----------------------- --}}
             <main class="relative">
                 <div class="absolute inset-0 select-none overflow-x-auto overflow-y-hidden whitespace-nowrap transition-opacity flex"
-                    id="schduelDivMain">
-
-                    {{-- ------------------ List ----------------------- --}}
-                    {{-- @dd($project->schedule) --}}
-                    @if (count($project->schedule) > 0)
-                        @foreach ($project->schedule as $schedule)
-                            <div
-                                class="h-max min-w-60  md:min-w-72 inline-block pb-2 mr-4 bg-slate-400/20 rounded-lg relative inset-0">
-                                <div class="flex items-center justify-between p-2 px-3" x-data="{ show: false }">
-                                    <div x-show="show" style="display: none;"
-                                        class="absolute cursor-pointer bg-white block py-1 w-64 rounded-md top-10 left-4 z-50 shadow-lg">
-                                        <div class="hover:bg-slate-400/15 py-1 px-4 text-gray-500">Delete</div>
-                                    </div>
-                                    <span
-                                        class="text-gray-600 font-semibold">{{ str_word_count($schedule->title, 0) > 2 ? implode(' ', array_slice(explode(' ', $schedule->title), 0, 2)) . '...' : $schedule->title }}</span>
-                                    <span @click="show = !show"
-                                        class="text-gray-600 font-semibold py-1 px-2 rounded-md hover:bg-slate-300 cursor-pointer">
-                                        <svg xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" aria-hidden="true"
-                                            data-slot="icon" class="w-5" width="24" height="24">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-                                                stroke="#000000" fill="none" stroke-width="1.5px"></path>
-                                        </svg>
-                                    </span>
-                                </div>
-
-
-                                {{-- ------------------Tasks Start----------------------- --}}
-                                <div class="overflow-y-auto px-2 max-h-80 min-h-0">
-                                    @if (count($schedule->task) > 0)
-                                        @foreach ($schedule->task as $task)
-                                            <div
-                                                class="mb-2 openModal cursor-pointer bg-white rounded-lg px-3 py-1 text-gray-700 shadow hover:shadow-md">
-                                                <div class="py-1.5 text-gray-500 text-sm">{{ $task->taskTitle }}</div>
-                                                <div class="flex items-center justify-between">
-                                                    <div class="flex items-center">
-                                                        <div class="flex items-center py-1 mr-3">
-                                                            <span class="mr-2">
-                                                                <svg xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                    viewBox="0 0 24 24" stroke-width="1.5"
-                                                                    stroke="currentColor" aria-hidden="true"
-                                                                    data-slot="icon" class="h-4 w-4 text-gray-400"
-                                                                    width="24" height="24">
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round"
-                                                                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
-                                                                        stroke="#9CA3AF" fill="none"
-                                                                        stroke-width="1.5px">
-                                                                    </path>
-                                                                </svg>
-                                                            </span>
-                                                            <span
-                                                                class="text-[12px] text-gray-500">{{ \Carbon\Carbon::parse($task->dueDate)->format('F j, Y') }}
-                                                            </span>
-                                                        </div>
-                                                        <div class="flex items-center py-1 mr-3">
-                                                            <span class="mr-1">
-                                                                <svg xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                    viewBox="0 0 24 24" stroke-width="1.5"
-                                                                    stroke="currentColor" aria-hidden="true"
-                                                                    data-slot="icon" class="h-4 w-4 text-gray-400"
-                                                                    width="24" height="24">
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round"
-                                                                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                                                                        stroke="#9CA3AF" fill="none"
-                                                                        stroke-width="1.5px">
-                                                                    </path>
-                                                                </svg>
-                                                            </span>
-                                                            <span class="text-[12px] text-gray-500">1</span>
-                                                            <span class="text-[12px] text-gray-500">/</span>
-                                                            <span class="text-[12px] text-gray-500">1</span>
-                                                        </div>
-                                                    </div>
-                                                    <x-userPicture class="w-5 h-5" :about="'Manager'"
-                                                        :users="__(
-                                                            'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                                                        )" />
-                                                </div>
-                                            </div>
-
-                                            <div
-                                                class="mb-2 openModal cursor-pointer bg-white rounded-lg px-3 py-1 text-gray-700 shadow hover:shadow-md">
-                                                <div class="py-1.5 text-gray-500 text-sm">User feedback gathering</div>
-                                                <div class="flex items-center justify-between">
-                                                    <div class="flex items-center">
-                                                        <div class="flex items-center py-1 mr-3">
-                                                            <span class="mr-2">
-                                                                <svg xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                    viewBox="0 0 24 24" stroke-width="1.5"
-                                                                    stroke="currentColor" aria-hidden="true"
-                                                                    data-slot="icon" class="h-4 w-4 text-gray-400"
-                                                                    width="24" height="24">
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round"
-                                                                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
-                                                                        stroke="#9CA3AF" fill="none"
-                                                                        stroke-width="1.5px">
-                                                                    </path>
-                                                                </svg>
-                                                            </span>
-                                                            <span class="text-[12px] text-gray-500">Jun 27, 2024</span>
-                                                        </div>
-                                                        <div class="flex items-center py-1 mr-3">
-                                                            <span class="mr-1">
-                                                                <svg xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                    viewBox="0 0 24 24" stroke-width="1.5"
-                                                                    stroke="currentColor" aria-hidden="true"
-                                                                    data-slot="icon" class="h-4 w-4 text-gray-400"
-                                                                    width="24" height="24">
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round"
-                                                                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                                                                        stroke="#9CA3AF" fill="none"
-                                                                        stroke-width="1.5px">
-                                                                    </path>
-                                                                </svg>
-                                                            </span>
-                                                            <span class="text-[12px] text-gray-500">1</span>
-                                                            <span class="text-[12px] text-gray-500">/</span>
-                                                            <span class="text-[12px] text-gray-500">1</span>
-                                                        </div>
-                                                    </div>
-                                                    <x-userPicture class="w-5 h-5" :about="'Manager'"
-                                                        :users="__(
-                                                            'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                                                        )" />
-                                                </div>
-                                            </div>
-
-                                            <div class="rounded-md border w-full hidden writetask">
-                                                <textarea
-                                                    class="rounded-md px-3  pt-1 outline-none block  w-full resize-none  text-gray-600 placeholder:text-gray-500 border-2 border-sky-500"
-                                                    placeholder="Enter task title..."
-                                                    style="overflow: hidden; overflow-wrap: break-word; text-align: start; height: 60px;"></textarea>
-                                                <div class="flex items-center mt-2">
-                                                    <div
-                                                        class="bg-blue-600 rounded-md text-white hover:bg-sky-500 px-2 py-1 cursor-pointer font-semibold text-sm">
-                                                        Add Task</div>
-                                                    <button
-                                                        class="outline-none px-2 font-bold text-sm cancelTask">Cancel</button>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    @endif
-                                </div>
-                                {{-- ------------------Tasks End----------------------- --}}
-
-                                <div
-                                    class="cursor-pointer hover:bg-slate-500/20 mt-3 mx-1 px-2 py-[6px] rounded-md flex items-center addTask">
-                                    <span>
-                                        <svg xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" aria-hidden="true"
-                                            data-slot="icon" class="h-4 w-4" width="24" height="24">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M12 4.5v15m7.5-7.5h-15" stroke="#6B8291" fill="none"
-                                                stroke-width="1.5px"></path>
-                                        </svg>
-                                    </span>
-                                    <div class="ml-2 text-gray-500">Add Task</div>
-                                </div>
-                            </div>
-                        @endforeach
-                    @endif
-
-
-                    {{-- ------------------ Add List ----------------------- --}}
-
-                    <div id="addList"
-                        class="cursor-pointer min-w-60 md:min-w-72 flex items-center h-max py-2.5 mt-1 border-2 border-dashed px-3 rounded-lg border-slate-400 hover:bg-slate-200/20 mr-3">
-                        <span>
-                            <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                aria-hidden="true" data-slot="icon" class="h-4 w-4" width="24" height="24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"
-                                    stroke="#6B7280" fill="none" stroke-width="1.5px"></path>
-                            </svg>
-                        </span>
-                        <span class="text-gray-500 text-[15px] ml-2">
-                            Add list
-                        </span>
-                    </div>
-                    <div id="writeList" class="hidden bg-slate-400/20 h-fit p-2 rounded-lg min-w-60 md:min-w-72 mr-3">
-                        <input type="text" id="taskTitle" required
-                            class="w-full px-3 outline-none mb-2 block border-2 border-sky-600 py-0.5 rounded-md"
-                            placeholder="Enter list title...">
-                        <div class="flex items-center space-x-2">
-                            <div id="addNewList"
-                                class="px-3 py-1 bg-blue-700 hover:bg-blue-600 text-white rounded-md font-bold cursor-pointer w-max">
-                                Add list</div>
-                            <div id="cancelList"
-                                class="font-semibold text-gray-500 hover:text-gray-800 cursor-pointer">Cancel</div>
-                        </div>
-                    </div>
-                </div>
+                    id="schduelDivMain"></div>
             </main>
         </section>
     </div>
+
     <div class="ldcv" id="scheduleDelete">
         <div class="base">
             <div class="inner">
@@ -628,6 +427,7 @@
             }
         }
 
+        // Schedule Fetching
         function fetchSchedule() {
             $.ajax({
                 type: "GET",
@@ -676,6 +476,10 @@
                         // Task Div
                         const taskDiv = $("<div>").addClass(
                             'overflow-y-auto px-2 max-h-80 min-h-0');
+                        schedule.task.forEach(function(task) {
+                            taskDiv.append(createTaskCard(task));
+                        })
+
 
                         // Button to add new task
                         const addTaskDiv = $("<div>").addClass(
@@ -690,17 +494,18 @@
                         const addTask = $("<div>").addClass('rounded-md border w-full writetask px-1')
                             .css('display', 'none');
                         const taskTextArea = $("<textarea>").addClass(
-                            'rounded-lg px-3 pt-1 outline-none block w-full resize-none text-gray-600 placeholder:text-gray-500 border-2 border-sky-500 pb-3'
-                        ).attr('placeholder', 'Enter Task...');
+                            'rounded-lg px-3 pt-1 outline-none block w-full resize-none text-gray-600 placeholder:text-gray-500 border-2 border-sky-500 pb-3 taskinput'
+                        ).data('schedule_id', schedule.id).attr('placeholder', 'Enter Task...');
                         const taskAddCancelButtons = $("<div>").addClass("flex items-center mt-2");
                         const addTaskButton = $("<div>").addClass(
-                            'bg-blue-600 rounded-md text-white hover:bg-sky-500 px-2 py-1 cursor-pointer font-semibold text-sm'
+                            'bg-blue-600 rounded-md text-white hover:bg-sky-500 px-2 py-1 cursor-pointer font-semibold text-sm newTask'
                         ).text("Add Task");
                         const cancelButton = $("<button>").addClass(
                             'outline-none px-2 font-bold text-sm cancelTask').text('Cancel').click(
                             function() {
                                 const index = $('.cancelTask').index(this);
                                 $('.addTask').eq(index).show();
+                                $('.taskinput').eq(index).val('');
                                 $('.writetask').eq(index).hide();
                             });
 
@@ -731,8 +536,6 @@
                     const writeListDiv = $("<div>").attr('id', 'writeList').addClass(
                         'hidden bg-slate-400/20 h-fit p-2 rounded-lg min-w-60 md:min-w-72 mr-3'
                     ).append(
-                        $('<span>').addClass('w-full px-1 text-red-500 font-bold hidden').text(
-                            'Field Can\'t Be Empty').attr('id', 'errormsg'),
                         $('<input>').attr({
                             type: 'text',
                             id: 'schduleTitle',
@@ -774,7 +577,9 @@
 
                     $('#cancelList').on('click', function() {
                         toggleVisibility('#writeList', '#addList');
-                        $("#errormsg").hide();
+                        $("#schduleTitle").removeClass(
+                            'border-red-500 placeholder:text-red-500 font-bold')
+                        $("#schduleTitle").attr("placeholder", "Enter list title...");
                     });
 
                     setupModal();
@@ -785,12 +590,107 @@
             });
         }
 
+        fetchSchedule();
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return new Intl.DateTimeFormat('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+            }).format(date);
+        }
+
+        function createTaskCard(task) {
+            // Create the main container
+            const taskCard = $('<div>', {
+                class: 'mb-2 openModal cursor-pointer bg-white rounded-lg px-3 py-1 text-gray-700 shadow hover:shadow-md'
+            });
+
+            // Create the title
+            const taskTitle = $('<div>', {
+                class: 'py-1.5 text-gray-500 text-sm',
+                text: task.taskTitle
+            }).appendTo(taskCard);
+
+            // Create the flex container
+            const flexContainer = $('<div>', {
+                class: 'flex items-center justify-between'
+            }).appendTo(taskCard);
+
+            // Create the left part of the flex container
+            const leftFlexContainer = $('<div>', {
+                class: 'flex items-center'
+            }).appendTo(flexContainer);
+
+            // Create the date container
+            if (task.dueDate !== null) {
+                const dateContainer = $('<div>', {
+                    class: 'flex items-center py-1 mr-3'
+                }).appendTo(leftFlexContainer);
+
+                // Add Calendar icon
+                $('<span>', {
+                    class: 'mr-2'
+                }).append($(
+                    `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-4 w-4 text-gray-400" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" stroke="#9CA3AF" fill="none" stroke-width="1.5px"></path></svg>`
+                )).appendTo(dateContainer);
+
+                // Add due date
+                const formattedDate = formatDate(task.dueDate);
+                $('<span>', {
+                    class: 'text-[12px] text-gray-500',
+                    text: formattedDate
+                }).appendTo(dateContainer);
+            }
+
+            // Create the status container
+            const checkListContainer = $('<div>', {
+                class: 'flex items-center py-1 mr-3'
+            }).appendTo(leftFlexContainer);
+
+            // Add status icon
+            $('<span>', {
+                class: 'mr-1'
+            }).append(
+                $(
+                    `<svg xmlns:xlink="http://www.w3.org/2000/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-4 w-4 text-gray-400" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="#9CA3AF" fill="none"stroke-width="1.5px"></path></svg>`
+                )
+            ).appendTo(checkListContainer);
+
+            // Add status text
+            $('<span>', {
+                class: 'text-[12px] text-gray-500',
+                text: '1'
+            }).appendTo(checkListContainer);
+            $('<span>', {
+                class: 'text-[12px] text-gray-500',
+                text: '/'
+            }).appendTo(checkListContainer);
+            $('<span>', {
+                class: 'text-[12px] text-gray-500',
+                text: '1'
+            }).appendTo(checkListContainer);
+
+            // Add user picture
+            $('<div>', {
+                class: 'w-5 h-5',
+                css: {
+                    'background-image': `url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
+                    'background-size': 'cover',
+                    'border-radius': '50%'
+                }
+            }).appendTo(flexContainer);
+
+            return taskCard;
+        }
+
+
         // Toggle visibility function
         function toggleVisibility(hideSelector, showSelector) {
             $(hideSelector).hide();
             $(showSelector).show();
         }
-        fetchSchedule();
 
         $(document).on('click', '.yesDeleteSchdule', function() {
             $.ajax({
@@ -809,12 +709,17 @@
             });
         });
 
-        // Add new Record
+        $(document).on('input', '#schduleTitle', function() {
+            $("#schduleTitle").removeClass('border-red-500 placeholder:text-red-500 font-bold')
+            $("#schduleTitle").addClass('border-sky-500')
+        });
+        // Add new Schedule
         $(document).on('click', '#addNewList', function() {
             const schduleTitle = $("#schduleTitle").val();
             const projectId = {{ $project->id }};
             if (schduleTitle === '') {
-                $("#errormsg").show();
+                $("#schduleTitle").addClass('border-red-500 placeholder:text-red-500 font-bold')
+                $("#schduleTitle").attr("placeholder", "Empty Field");
             } else {
                 $.ajax({
                     type: "POST",
@@ -835,6 +740,33 @@
             }
         });
 
+
+        // Add new Task
+        $(document).on('click', '.newTask', function() {
+            const index = $('.newTask').index(this);
+            const taskValue = $('.taskinput').eq(index).val();
+            const scheduleId = $('.taskinput').eq(index).data('schedule_id')
+            $.ajax({
+                type: "POST",
+                url: "{{ route('task.store') }}",
+                data: {
+                    taskTitle: taskValue,
+                    schedule_id: scheduleId,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    console.log(response);
+                    $('.taskinput').eq(index).removeData('schedule_id')
+                    fetchSchedule();
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        })
+
+
+        // Setting updated project point color
         function getProject() {
             let url = "/project/" + {{ $project->id }};
             $.ajax({
@@ -848,6 +780,7 @@
         }
         getProject();
 
+        // Updating project point color
         $('.color-option').click(function() {
             var myColor = $(this).data('mycolor');
             $.ajax({

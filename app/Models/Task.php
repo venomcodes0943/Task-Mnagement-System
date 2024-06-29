@@ -9,6 +9,7 @@ class Task extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
     public function schedule()
     {
         return $this->belongsTo(Project::class);

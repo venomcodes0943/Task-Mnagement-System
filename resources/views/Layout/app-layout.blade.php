@@ -194,6 +194,7 @@
     </div>
 
     <x-projectModal />
+
     <script>
         ! function() {
             var s, o;
