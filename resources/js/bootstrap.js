@@ -29,19 +29,19 @@ import ldcover from 'ldcover';
 
 // TaskModal
 
-const taskModal = document.querySelector('#taskModal');
+// const taskModal = document.querySelector('#taskModal');
 
-if (taskModal) {
-    const ldcv = new ldcover({ root: taskModal });
-    const modals = document.querySelectorAll('.openModal');
-    if (modals) {
-        modals.forEach(modal => {
-            modal.addEventListener('click', function () {
-                ldcv.toggle();
-            });
-        });
-    }
-}
+// if (taskModal) {
+//     const ldcv = new ldcover({ root: taskModal });
+//     const modals = document.querySelectorAll('.openModal');
+//     if (modals) {
+//         modals.forEach(modal => {
+//             modal.addEventListener('click', function () {
+//                 ldcv.toggle();
+//             });
+//         });
+//     }
+// }
 
 
 // Member Modal

@@ -22,6 +22,25 @@ class ScheduleController extends Controller
         }
     }
 
+    public function update(Request $request, $id)
+    {
+
+        $schedule = Schedule::findOrFail($id);
+
+        if (!$schedule) {
+            return response()->json(['message' => 'Record not found'], 404);
+        }
+
+        if ($request->has('title')) {
+            $schedule->title = $request->title;
+        }
+        try {
+            $schedule->save();
+            return response()->json(['message' => 'Record updated successfully', 'record' => $schedule], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to update record'], 500);
+        }
+    }
 
 
 

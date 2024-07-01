@@ -15,8 +15,8 @@
                         <div class="h-2.5 w-2.5 rounded-full" id="pointColor"></div>
                     </div>
                     <div>
-                        <div class="md:text-xl p-1 rounded hover:bg-slate-200 cursor-pointer">
-                            {{ $project->name }}
+                        <div id="projectName" spellcheck="false" contenteditable="true"
+                            class="rounded px-2 text-xl/7 font-medium text-gray-800 hover:bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600 cursor-pointer">
                         </div>
                     </div>
                     <div x-show = "open" style="display: none;"
@@ -410,6 +410,7 @@
         }.call(this);
     </script>
     <script>
+        // Schedule Delete Modal
         let ldcvDeleteModal;
 
         function setupModal() {
@@ -434,6 +435,10 @@
                 url: "{{ route('project', ['id' => $project->id]) }}",
                 success: function(response) {
                     const schduelDivMain = $("#schduelDivMain");
+                    const projectName = $("#projectName");
+                    // const projectNameInput = $("#projectNameInput").val(response.project.name);
+                    // projectNameInput.css('width', response.project.name.length + "ch").data('project_id');
+                    projectName.text(response.project.name)
                     schduelDivMain.empty();
                     response.project.schedule.forEach(function(schedule) {
                         // Main Div Of Schedule
@@ -457,12 +462,11 @@
 
                         // Schedule Title
                         const scheduleTitle = schedule.title;
-                        const truncatedTitle = scheduleTitle.length > 15 ? scheduleTitle
-                            .slice(
-                                0, 15) +
-                            '...' : scheduleTitle;
-                        const schduleTitleSpan = $('<span>').addClass(
-                            'text-gray-600 font-semibold').text(truncatedTitle);
+                        const schduleTitleSpan = $('<h1>').addClass(
+                            'scheduleupdate rounded px-2 font-medium py-0.5 text-gray-800 hover:bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600 cursor-pointer min-w-56'
+                        ).text(scheduleTitle).attr('contenteditable', 'true').attr('spellcheck',
+                            'false').data('update_id',
+                            schedule.id);
 
                         // Toggle button for showing/hiding delete option
                         const schduleToggleSpan = $('<span>').addClass(
@@ -540,7 +544,7 @@
                             type: 'text',
                             id: 'schduleTitle',
                             required: true,
-                            class: 'w-full px-3 outline-none mb-2 block border-2 border-sky-600 py-0.5 rounded-md',
+                            class: 'block w-full rounded-md border-0 focus:outline-none mb-2 pl-3 py-1 text-gray-900 shadow placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600',
                             placeholder: 'Enter list title...'
                         })
                     ).append(
@@ -572,14 +576,16 @@
                     schduelDivMain.append(writeListDiv);
 
                     $('#addList').on('click', function() {
+                        $("#schduleTitle").val('');
+                        setTimeout(function() {
+                            $("#schduleTitle").focus();
+                        }, 0);
                         toggleVisibility('#addList', '#writeList');
                     });
 
                     $('#cancelList').on('click', function() {
                         toggleVisibility('#writeList', '#addList');
-                        $("#schduleTitle").removeClass(
-                            'border-red-500 placeholder:text-red-500 font-bold')
-                        $("#schduleTitle").attr("placeholder", "Enter list title...");
+                        $("#schduleTitle").addClass('border-sky-600')
                     });
 
                     setupModal();
@@ -605,11 +611,12 @@
             // Create the main container
             const taskCard = $('<div>', {
                 class: 'mb-2 openModal cursor-pointer bg-white rounded-lg px-3 py-1 text-gray-700 shadow hover:shadow-md'
-            });
 
+            });
+            taskCard.attr('task_id', task.id);
             // Create the title
             const taskTitle = $('<div>', {
-                class: 'py-1.5 text-gray-500 text-sm',
+                class: 'py-1.5 text-gray-700',
                 text: task.taskTitle
             }).appendTo(taskCard);
 
@@ -685,6 +692,75 @@
             return taskCard;
         }
 
+        $(document).on('click', "#projectName", function() {
+            $(this).off('keydown').on('keydown', function(event) {
+                if (event.keyCode === 13) { // Enter key
+                    event.preventDefault();
+                    $("#projectName").attr('contenteditable', 'false');
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('project.update', ['id' => $project->id]) }}",
+                        data: {
+                            name: $(this).text(),
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            fetchSchedule();
+                            fetchSideProjects();
+                            if ($("#projectName").attr('contenteditable') !== 'true') {
+                                $("#projectName").attr('contenteditable', 'true');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            if (xhr.status === 422) {
+                                let response = JSON.parse(xhr.responseText);
+                                let errors = response[1].name[0];
+                                $("#errorMessages").text(errors).show();
+                                setTimeout(() => {
+                                    $("#errorMessages").hide();
+                                }, 2500);
+                            }
+                            fetchSchedule();
+                            fetchSideProjects();
+                        }
+                    });
+                }
+            });
+        });
+
+
+        $(document).on('click', ".scheduleupdate", function() {
+            $(this).off('keydown').on('keydown', function(event) {
+                if (event.keyCode === 13) { // Enter key
+                    event.preventDefault();
+                    $(this).attr('contenteditable', 'false');
+                    $.ajax({
+                        type: "POST",
+                        url: `{{ route('schedule.update', ['id' => ':id']) }}`.replace(':id', $(
+                            this).data('update_id')),
+                        data: {
+                            title: $(this).text(),
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            fetchSchedule();
+                            fetchSideProjects();
+                        },
+                        error: function(xhr, status, error) {
+                            if (xhr.status === 422) {
+                                let response = JSON.parse(xhr.responseText);
+                                let errors = response[1].name[0];
+                                $("#errorMessages").text(errors).show();
+                                setTimeout(() => {
+                                    $("#errorMessages").hide();
+                                }, 2500);
+                            }
+                        }
+                    });
+                }
+            });
+        });
 
         // Toggle visibility function
         function toggleVisibility(hideSelector, showSelector) {
@@ -709,17 +785,12 @@
             });
         });
 
-        $(document).on('input', '#schduleTitle', function() {
-            $("#schduleTitle").removeClass('border-red-500 placeholder:text-red-500 font-bold')
-            $("#schduleTitle").addClass('border-sky-500')
-        });
         // Add new Schedule
         $(document).on('click', '#addNewList', function() {
             const schduleTitle = $("#schduleTitle").val();
             const projectId = {{ $project->id }};
             if (schduleTitle === '') {
-                $("#schduleTitle").addClass('border-red-500 placeholder:text-red-500 font-bold')
-                $("#schduleTitle").attr("placeholder", "Empty Field");
+                $("#schduleTitle").removeClass('border-sky-600')
             } else {
                 $.ajax({
                     type: "POST",

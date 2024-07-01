@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProjectController extends Controller
 {
@@ -31,19 +32,38 @@ class ProjectController extends Controller
 
     public function create(Request $request)
     {
-        $creadentials = $request->validate([
-            'name' => 'required|string|max:255',
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|unique:projects,name',
             'color' => 'required|string|max:7'
         ]);
 
-        $project = Project::create($creadentials);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $credentials = [
+            'name' => $request->name,
+            'color' => $request->color
+        ];
+
+        $project = Project::create($credentials);
 
         return response()->json(['project' => $project], 201);
     }
 
+
     public function update(Request $request, $id)
     {
         $project = Project::findOrFail($id);
+        // Validate the request data
+        $validator = Validator::make($request->all(), [
+            'name' => 'string|unique:projects,name,' . $id,
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors', $validator->errors()], 422);
+        }
+
+
         if (!$project) {
             return response()->json(['message' => 'Record not found'], 404);
         }
@@ -65,7 +85,7 @@ class ProjectController extends Controller
             $project->save();
             return response()->json(['message' => 'Record updated successfully', 'record' => $project], 200);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to update record', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Failed to update record'], 500);
         }
 
     }

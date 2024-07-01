@@ -6,8 +6,8 @@
         {{-- Page Title Bar  --}}
         <x-mainPageTitle :title="__('Projects')">
             <div
-                class="flex flex-col md:flex-row items-end space-y-2 md:space-y-0 mb-2 space-x-3 flex-wrap md:items-center">
-                <div id="active" class="flex items-center py-1 bg-slate-200 px-3 rounded-md cursor-pointer">
+                class="flex  items-end space-y-2 md:space-y-0 mb-4 md:mb-2 space-x-2 flex-wrap md:items-center">
+                <div id="active" class="flex items-center py-1 bg-slate-200 px-1 md:px-3 rounded-md cursor-pointer">
                     <span>
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"
@@ -19,9 +19,9 @@
                                 stroke="#1F2937" fill="none" stroke-width="1.5px"></path>
                         </svg>
                     </span>
-                    <span class="pl-2">Active</span>
+                    <span class="pl-2 text-sm md:text-base">Active</span>
                 </div>
-                <div id="archived" class="flex items-center py-1 px-3 rounded-md cursor-pointer">
+                <div id="archived" class="flex items-center py-1 px-1 md:px-3 rounded-md cursor-pointer">
                     <span>
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -32,10 +32,10 @@
                                 stroke="#4B5563" fill="none" stroke-width="1.5px"></path>
                         </svg>
                     </span>
-                    <span class="pl-2">Archived</span>
+                    <span class="pl-2 text-sm md:text-base">Archived</span>
                 </div>
                 <div
-                    class="px-3 py-1 bg-blue-700 hover:bg-blue-600 text-white rounded-md font-bold cursor-pointer openProjectModal">
+                    class="px-1 md:px-3 py-1 text-sm md:text-base bg-blue-700 hover:bg-blue-600 text-white rounded-md font-bold cursor-pointer openProjectModal">
                     Create
                     Project</div>
             </div>
@@ -67,7 +67,14 @@
                 fetchSideProjects();
             },
             error: function(xhr, status, error) {
-                console.error(xhr.responseText);
+                if (xhr.status === 422) {
+                    let response = JSON.parse(xhr.responseText);
+                    let errors = response[1].name[0];
+                    $("#errorMessages").text(errors).show();
+                    setTimeout(() => {
+                        $("#errorMessages").hide();
+                    }, 2000);
+                }
             }
         });
     });
@@ -85,7 +92,14 @@
                 fetchSideProjects();
             },
             error: function(xhr, status, error) {
-                console.error(xhr.responseText);
+                if (xhr.status === 422) {
+                    let response = JSON.parse(xhr.responseText);
+                    let errors = response[1].name[0];
+                    $("#errorMessages").text(errors).show();
+                    setTimeout(() => {
+                        $("#errorMessages").hide();
+                    }, 2000);
+                }
             }
         });
     });

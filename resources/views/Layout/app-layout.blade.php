@@ -123,26 +123,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-3 h-[360px] projectsContainer" x-show='show' x-transition id="">
-                        {{-- @if (count(app('Projects')) > 0)
-                            @foreach (app('Projects') as $project)
-                                @php
-                                    $isActive = request()->routeIs('project') && request()->route('id') == $project->id;
-                                @endphp
-
-                                <a href="{{ route('project', $project->id) }}">
-                                    <x-sideList :title="__($project->name)" :active="$isActive" :project="__('true')">
-                                        <div class="w-3 h-3 py-1 rounded-full"
-                                            style="background-color: {{ $project->color }};"></div>
-                                    </x-sideList>
-                                </a>
-                            @endforeach
-                        @else
-                            <div class="text-white ml-4 font-bold">
-                                No Projects
-                            </div>
-                        @endif --}}
-                    </div>
+                    <div class="mt-3 h-[360px] projectsContainer" x-show='show' x-transition id=""></div>
                 </div>
             </div>
         </div>
@@ -188,12 +169,15 @@
                     </x-navProfile>
                 </div>
             </div>
+            <div id="errorMessages" style="display: none;"
+                class="transition-all duration-300 ease-in-out z-50 absolute bottom-10 right-12 px-4 py-2 bg-red-500 rounded-md text-white font-bold tetx-xl">
+            </div>
             <!--Page Content-->
             {{ $slot }}
         </div>
     </div>
-
     <x-projectModal />
+    <x-taskModal />
 
     <script>
         ! function() {
@@ -370,6 +354,22 @@
     </script>
 
     <script>
+        // Task Modal
+        let ldcvTaskModal;
+        const taskModal = document.querySelector('#taskModal');
+
+        if (taskModal) {
+            ldcvTaskModal = new ldcover({
+                root: taskModal
+            });
+
+            $(document).on('click', function(event) {
+                if (event.target.classList.contains('openModal') || event.target.closest('.openModal')) {
+                    ldcvTaskModal.toggle();
+                }
+            });
+        }
+
         // Project Modal
         let ldcvProjectModal;
 
@@ -388,6 +388,7 @@
             }
         }
 
+
         function fetchSideProjects() {
             $.ajax({
                 url: "{{ route('projects') }}",
@@ -396,10 +397,20 @@
                     let projectsContainer = $('.projectsContainer');
                     projectsContainer.empty();
                     if (data.length > 0) {
+                        const currentUrl = window.location.href;
                         data.forEach(project => {
                             if (project.archived === 0) {
-                                let projectHtml =
-                                    `<a href="/project/${project.id}"><x-sideList :title="'${project.name}'" :active="false" :project="'true'"><div class="w-3 h-3 py-1 rounded-full" style="background-color: ${project.color};"></div></x-sideList></a>`;
+                                const projectUrl =
+                                    `${new URL(window.location.href).origin}/project/${project.id}`;
+                                const isActive = currentUrl === projectUrl;
+                                let projectHtml = "";
+                                if (isActive) {
+                                    projectHtml +=
+                                        `<a href="/project/${project.id}"><x-sideList :title="'${project.name}'" :active="true" :project="'true'"><div class="w-3 h-3 py-1 rounded-full" style="background-color: ${project.color};"></div></x-sideList></a>`;
+                                } else {
+                                    projectHtml +=
+                                        `<a href="/project/${project.id}"><x-sideList :title="'${project.name}'" :active="false" :project="'true'"><div class="w-3 h-3 py-1 rounded-full" style="background-color: ${project.color};"></div></x-sideList></a>`;
+                                }
                                 projectsContainer.append(projectHtml);
                             }
                         });
@@ -544,9 +555,18 @@
                         ldcvProjectModal.toggle();
                     },
                     error: function(xhr, status, error) {
-                        console.error("An error occurred:", error);
+                        if (xhr.status === 422) {
+                            let response = JSON.parse(xhr.responseText);
+                            let error = response.errors.name ? response.errors.name[0] :
+                                'An error occurred';
+                            $("#errorMessages").text(error).show();
+                            setTimeout(() => {
+                                $("#errorMessages").hide();
+                            }, 2500);
+                        }
                     }
                 });
+
             }
         });
     </script>
