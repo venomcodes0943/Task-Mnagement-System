@@ -26,24 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 import ldcover from 'ldcover';
 
-
-// TaskModal
-
-// const taskModal = document.querySelector('#taskModal');
-
-// if (taskModal) {
-//     const ldcv = new ldcover({ root: taskModal });
-//     const modals = document.querySelectorAll('.openModal');
-//     if (modals) {
-//         modals.forEach(modal => {
-//             modal.addEventListener('click', function () {
-//                 ldcv.toggle();
-//             });
-//         });
-//     }
-// }
-
-
 // Member Modal
 const memberModal = document.querySelector('#memberModal');
 if (memberModal) {

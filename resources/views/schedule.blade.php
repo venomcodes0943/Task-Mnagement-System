@@ -233,7 +233,7 @@
     </div>
 
     {{-- Task Modal --}}
-    <x-taskModal :taskDetails="true" />
+    <x-taskModal />
     <script src="{{ asset('assets/js/index.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
     <script>
@@ -481,7 +481,7 @@
                         const taskDiv = $("<div>").addClass(
                             'overflow-y-auto px-2 max-h-80 min-h-0');
                         schedule.task.forEach(function(task) {
-                            taskDiv.append(createTaskCard(task));
+                            taskDiv.append(createTaskCard(task, response.project.id, schedule.id));
                         })
 
 
@@ -607,13 +607,15 @@
             }).format(date);
         }
 
-        function createTaskCard(task) {
+        function createTaskCard(task, projectId, scheduleId) {
             // Create the main container
             const taskCard = $('<div>', {
                 class: 'mb-2 openModal cursor-pointer bg-white rounded-lg px-3 py-1 text-gray-700 shadow hover:shadow-md'
 
             });
+            taskCard.attr('project_id', projectId);
             taskCard.attr('task_id', task.id);
+            taskCard.attr('schedule_id', scheduleId);
             // Create the title
             const taskTitle = $('<div>', {
                 class: 'py-1.5 text-gray-700',
@@ -652,42 +654,42 @@
             }
 
             // Create the status container
-            const checkListContainer = $('<div>', {
-                class: 'flex items-center py-1 mr-3'
-            }).appendTo(leftFlexContainer);
+            // const checkListContainer = $('<div>', {
+            //     class: 'flex items-center py-1 mr-3'
+            // }).appendTo(leftFlexContainer);
 
             // Add status icon
-            $('<span>', {
-                class: 'mr-1'
-            }).append(
-                $(
-                    `<svg xmlns:xlink="http://www.w3.org/2000/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-4 w-4 text-gray-400" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="#9CA3AF" fill="none"stroke-width="1.5px"></path></svg>`
-                )
-            ).appendTo(checkListContainer);
+            // $('<span>', {
+            //     class: 'mr-1'
+            // }).append(
+            //     $(
+            //         `<svg xmlns:xlink="http://www.w3.org/2000/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-4 w-4 text-gray-400" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="#9CA3AF" fill="none"stroke-width="1.5px"></path></svg>`
+            //     )
+            // ).appendTo(checkListContainer);
 
-            // Add status text
-            $('<span>', {
-                class: 'text-[12px] text-gray-500',
-                text: '1'
-            }).appendTo(checkListContainer);
-            $('<span>', {
-                class: 'text-[12px] text-gray-500',
-                text: '/'
-            }).appendTo(checkListContainer);
-            $('<span>', {
-                class: 'text-[12px] text-gray-500',
-                text: '1'
-            }).appendTo(checkListContainer);
+            // // Add status text
+            // $('<span>', {
+            //     class: 'text-[12px] text-gray-500',
+            //     text: '1'
+            // }).appendTo(checkListContainer);
+            // $('<span>', {
+            //     class: 'text-[12px] text-gray-500',
+            //     text: '/'
+            // }).appendTo(checkListContainer);
+            // $('<span>', {
+            //     class: 'text-[12px] text-gray-500',
+            //     text: '1'
+            // }).appendTo(checkListContainer);
 
             // Add user picture
-            $('<div>', {
-                class: 'w-5 h-5',
-                css: {
-                    'background-image': `url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
-                    'background-size': 'cover',
-                    'border-radius': '50%'
-                }
-            }).appendTo(flexContainer);
+            // $('<div>', {
+            //     class: 'w-5 h-5',
+            //     css: {
+            //         'background-image': `url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
+            //         'background-size': 'cover',
+            //         'border-radius': '50%'
+            //     }
+            // }).appendTo(flexContainer);
 
             return taskCard;
         }

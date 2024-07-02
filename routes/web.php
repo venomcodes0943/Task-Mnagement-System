@@ -32,4 +32,6 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('schedule/delete/{id}', [ScheduleController::class, 'destroy'])->name('schedule.delete');
 
     Route::post('task/create', [TaskController::class, 'store'])->name('task.store');
+    Route::get('/task/{id}', [TaskController::class, 'taskDataForModal'])->name('taskForModal');
+
 });

@@ -1,5 +1,3 @@
-@props(['taskDetails'])
-
 <div class="ldcv" id="taskModal">
     <div class="base">
         <div class="inner" style="overflow: auto !important;">
@@ -7,9 +5,9 @@
                 <div class="flex items-center justify-between border-b border-gray-200 shadow-sm">
                     <div class="flex items-center space-x-2 px-6 text-gray-700">
                         <div class="w-2 h-2 bg-red-500 rounded-full"></div>
-                        <span>Project Name</span>
+                        <span id="modalProjectName"></span>
                         <span>/</span>
-                        <span>Schedule Name</span>
+                        <span id="modalScheduleName"></span>
                     </div>
                     <span data-ldcv-set="" class="p-2 m-2.5 cursor-pointer hover:bg-slate-300/20 rounded-full">
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +24,7 @@
                     <main class="flex-1 px-6 pb-8 pt-6">
                         <div class="flex items-center">
                             <x-checkbox />
-                            <div class="font-bold">TaskTitle</div>
+                            <div class="font-bold" id="modalTaskTitle"></div>
                         </div>
                         <div class="mt-4 flex items-start">
                             <span>
@@ -42,7 +40,7 @@
                             <div class="flex-1 ml-4">
                                 <span class="text-sm text-gray-500" id="disSpan">Description</span>
                                 <div class="rounded-md border pt-2 pb-3 px-3 w-full hidden" id="disToWrite">
-                                    <textarea
+                                    <textarea id="modalTaskDescription" autofocus
                                         class=" outline-none block h-10 w-full resize-none border-0 p-0 text-sm text-gray-600 placeholder:font-normal placeholder:text-gray-500 focus:ring-0"
                                         placeholder="Description" style="overflow: hidden; overflow-wrap: break-word; text-align: start; height: 60px;"></textarea>
                                     <div class="flex items-center mt-4">
@@ -190,7 +188,7 @@
                             <h2 class="px-2 text-sm font-bold text-gray-600 mb-2">Project List</h2>
                             <div @click="open = !open"
                                 class="group flex items-center justify-between cursor-pointer hover:bg-gray-600/15 rounded-md hover:shadow-sm px-3 py-1">
-                                <span class="text-sm text-gray-500">all schedual</span>
+                                <span class="text-sm text-gray-600">all schedual</span>
                                 <span class="relative">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                         class="h-4 w-4 fill-current hidden group-hover:block" viewBox="0 0 20 20"
@@ -202,25 +200,28 @@
                                 </span>
                             </div>
                             <div class="relative">
-                                <div class="w-full absolute top-2 py-1 bg-white rounded-md border shadow-lg max-h-24 overflow-y-auto"
-                                    x-show='open'>
-                                    <div class="block px-3 text-sm py-1 cursor-pointer hover:bg-gray-200">
-                                        Todo
-                                    </div>
-                                    <div class="block px-3 text-sm py-1 cursor-pointer hover:bg-gray-200">
-                                        Working
-                                    </div>
-                                    <div class="block px-3 text-sm py-1 cursor-pointer hover:bg-gray-200">
-                                        outOfDate
-                                    </div>
-                                </div>
+                                <div class="w-full absolute top-2 py-1 bg-white rounded-md border shadow-xl z-50 max-h-44 overflow-y-auto"
+                                    x-show='open' id="scheduleList"></div>
                             </div>
                         </section>
                         <section class="py-2 border-b pb-3" x-data="{ open: false }">
-                            <h2 class="px-2 text-sm font-bold text-gray-600 mb-2">Due Date</h2>
+                            <div class="px-2 text-sm font-bold text-gray-600 mb-2">Due Date</div>
                             <div @click="open = !open"
                                 class="group flex items-center justify-between cursor-pointer hover:bg-gray-600/15 rounded-md hover:shadow-sm px-3 py-1">
-                                <span class="text-sm text-gray-500">Due Date</span>
+                                <div class="flex items-center">
+                                    <span>
+                                        <svg xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" aria-hidden="true"
+                                            data-slot="icon" class="h-4 w-4 text-gray-500" width="24"
+                                            height="24">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
+                                                stroke="#898F9B" fill="none" stroke-width="1.5px"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="ml-2 text-sm text-gray-600" id="modalDueDate">Due Date</span>
+                                </div>
                                 <span class="relative">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                         class="h-4 w-4 fill-current hidden group-hover:block" viewBox="0 0 20 20"

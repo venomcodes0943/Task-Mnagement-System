@@ -177,6 +177,7 @@
         </div>
     </div>
     <x-projectModal />
+
     <x-taskModal />
 
     <script>
@@ -363,12 +364,75 @@
                 root: taskModal
             });
 
-            $(document).on('click', function(event) {
-                if (event.target.classList.contains('openModal') || event.target.closest('.openModal')) {
-                    ldcvTaskModal.toggle();
+            $(document).on('click', ".openModal", function(event) {
+                const projectId = $(this).attr('project_id');
+                const taskId = $(this).attr('task_id');
+                const scheduleId = $(this).attr('schedule_id');
+                fetchForTask(projectId, taskId, scheduleId);
+                ldcvTaskModal.toggle();
+            });
+        }
+
+        function fetchForTask(projectId, taskId, scheduleId) {
+            return $.ajax({
+                type: "GET",
+                url: "{{ route('project', ['id' => ':id']) }}".replace(':id', projectId),
+                success: function(response) {
+                    $("#modalProjectName").text(response.project.name);
+                    const schedules = response.project.schedule
+                    const schedule = schedules.find((schedule) => schedule.id == scheduleId);
+                    if (schedule) {
+                        $("#modalScheduleName").text(schedule.title);
+                    } else {
+                        $("#modalScheduleName").text("No Schedule");
+                    }
+                    const task = schedule.task.find((task) => task.id == taskId);
+                    if (task) {
+                        $("#modalTaskTitle").text(task.taskTitle);
+
+                        function formatDate(dateString) {
+                            const date = new Date(dateString);
+                            return new Intl.DateTimeFormat('en-US', {
+                                month: 'long',
+                                day: 'numeric',
+                                year: 'numeric'
+                            }).format(date);
+                        }
+
+                        const modalDueDate = $("#modalDueDate");
+                        if (task.description) {
+                            $("#disSpan").text(task.description);
+                            $("#modalTaskDescription").text(task.description);
+                        }
+                        if (task.dueDate) {
+                            modalDueDate.text(formatDate(task.dueDate));
+                        }
+                    }
+
+                    const scheduleList = $("#scheduleList");
+                    scheduleList.empty();
+
+                    if (schedules.length > 0) {
+                        schedules.forEach((schedule) => {
+                            scheduleList.append(
+                                '<div class="flex cursor-pointer items-center px-4 py-2 text-xs text-gray-600 hover:bg-gray-200">' +
+                                schedule.title + '</div>');
+                        });
+                    }
+
                 }
             });
         }
+
+
+
+
+
+
+
+
+
+
 
         // Project Modal
         let ldcvProjectModal;

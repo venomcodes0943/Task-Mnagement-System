@@ -1,6 +1,5 @@
 <x-app-layout>
     <x-loader />
-
     <div class="px-2 md:px-8 py-6 pb-12 h-[92vh] overflow-y-auto">
 
         {{-- Page Title Bar  --}}
