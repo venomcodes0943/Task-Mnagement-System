@@ -23,7 +23,7 @@
                 <div class="flex ">
                     <main class="flex-1 px-6 pb-8 pt-6">
                         <div class="flex items-center">
-                            <x-checkbox />
+                            <input type="checkbox" class="ui-checkbox mx-2">
                             <div class="font-bold" id="modalTaskTitle"></div>
                         </div>
                         <div class="mt-4 flex items-start">
@@ -77,12 +77,17 @@
                                         </svg>
                                     </span>
                                 </div>
-                                <div class="flex-1 space-x-2 border-b pb-2">
-                                    <span class="font-semibold text-gray-700">Checklist</span>
-                                    <span class="font-medium text-gray-700">0/0</span>
+                                <div class="flex-1  space-x-2 border-b pb-2">
+                                    <div class="flex items-center">
+                                        <span class="font-semibold text-gray-700 mr-2">Checklist</span>
+                                        <span class="font-medium text-gray-700" id="doneCheckout">0</span>
+                                        <span class="font-medium text-gray-700">/</span>
+                                        <span class="font-medium text-gray-700" id="totalCheckout">0</span>
+                                    </div>
                                 </div>
                             </div>
                             <div x-show="show" class="pl-8 pr-8">
+                                <div class="my-3" id="checkoutToAdd"></div>
                                 <div id="addItem"
                                     class="flex items-center mt-4 text-gray-600 hover:text-gray-900 cursor-pointer">
                                     <span class="pr-3">

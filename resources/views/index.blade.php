@@ -13,7 +13,8 @@
             </div>
             <div class="flex flex-wrap items-center px-6 pt-4 pb-4 justify-between">
                 <div class="flex items-start">
-                    <x-checkbox />
+                    {{-- <x-checkbox /> --}}
+                    <input type="checkbox" class="ui-checkbox mx-2s">
                     <div class="pl-4">
                         <span
                             class="block text-slate-900 -mt-[2px] cursor-pointer hover:underline font-semibold openModal w-max">TaskTitle</span>

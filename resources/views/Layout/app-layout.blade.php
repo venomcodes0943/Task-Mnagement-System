@@ -10,7 +10,8 @@
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('assets/notes-svgrepo-com.svg') }}" type="image/x-icon">
-
+    <!-- Css -->
+    <link rel="stylesheet" href="{{ asset('assets/css/index.css') }}">
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -83,8 +84,9 @@
                                     fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                     aria-hidden="true" data-slot="icon" class="h-4 w-4 text-gray-500" width="24"
                                     height="24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                                        stroke="#6B7280" fill="none" stroke-width="1.5px"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m19.5 8.25-7.5 7.5-7.5-7.5" stroke="#6B7280" fill="none"
+                                        stroke-width="1.5px"></path>
                                 </svg>
                             </span>
                             <span x-show='!show' class="rotate-[-90deg]" style="display: none;">
@@ -420,6 +422,28 @@
                         });
                     }
 
+                    if (task.checkout.length > 0) {
+                        const checkoutToAdd = $("#checkoutToAdd")
+                        checkoutToAdd.empty();
+                        task.checkout.forEach((checkOut) => {
+                            const checkOutContainer = $("<div>").addClass('flex items-center my-2');
+                            const checkbox = $('<input>').attr('type', 'checkbox').addClass(
+                                'ui-checkbox mx-2');
+
+                            const checkoutContent = $('<div>').addClass('text-gray-500 text-sm').text(
+                                checkOut.checkoutName);
+                            checkOutContainer.append(checkbox, checkoutContent);
+                            checkoutToAdd.append(checkOutContainer);
+
+                            // Check if checkout is completed
+                            if (checkOut.completed === 1) {
+                                checkbox.prop('checked', true);
+                            }
+                        })
+                        const completedCheckout = task.checkout.filter((item) => item.completed === 1)
+                        const totalCheckout = $("#totalCheckout").text(task.checkout.length);
+                        const doneCheckout = $("#doneCheckout").text(completedCheckout.length);
+                    }
                 }
             });
         }
