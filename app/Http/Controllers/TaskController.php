@@ -22,7 +22,18 @@ class TaskController extends Controller
             return response()->json(['message' => "Error:" . $exception->getMessage()]);
         }
     }
+    public function show($id)
+    {
+        $task = Task::findOrFail($id);
+        if ($task) {
+            try {
+                return response()->json($task, 201);
+            } catch (\Exception $exception) {
+                return response()->json(['message' => "Error:" . $exception->getMessage()]);
 
+            }
+        }
+    }
 
     public function delete($id)
     {

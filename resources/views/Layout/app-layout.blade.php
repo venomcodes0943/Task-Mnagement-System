@@ -22,7 +22,6 @@
             class="w-64 absolute inset-y-0 left-0 transform translate-x-0 bg-slate-800 transition-transform duration-300 ease-in-out z-20">
             <div class="w-full py-[9.5px] border-b border-slate-50/15 h-max">
                 <div class="flex items-center gap-x-2 px-3">
-                    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
                     <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -84,9 +83,8 @@
                                     fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                     aria-hidden="true" data-slot="icon" class="h-4 w-4 text-gray-500" width="24"
                                     height="24">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="m19.5 8.25-7.5 7.5-7.5-7.5" stroke="#6B7280" fill="none"
-                                        stroke-width="1.5px"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                                        stroke="#6B7280" fill="none" stroke-width="1.5px"></path>
                                 </svg>
                             </span>
                             <span x-show='!show' class="rotate-[-90deg]" style="display: none;">
@@ -359,7 +357,7 @@
         // Task Modal
         let ldcvTaskModal;
         const taskModal = document.querySelector('#taskModal');
-
+        let currentTaskId = null;
         if (taskModal) {
             ldcvTaskModal = new ldcover({
                 root: taskModal
@@ -369,144 +367,318 @@
                 const projectId = $(this).attr('project_id');
                 const taskId = $(this).attr('task_id');
                 const scheduleId = $(this).attr('schedule_id');
-                fetchForTask(projectId, taskId, scheduleId);
+                currentTaskId = taskId
+                fetchComments(currentTaskId);
+                fetchCheckOut(currentTaskId);
+                // fetchForTask(projectId, taskId, scheduleId);
                 ldcvTaskModal.toggle();
-                clearModalContent();
             });
         }
 
-        function fetchForTask(projectId, taskId, scheduleId) {
+        // function fetchForTask(projectId, taskId, scheduleId) {
+        //     return $.ajax({
+        //         type: "GET",
+        //         url: "{{ route('project', ['id' => ':id']) }}".replace(':id', projectId),
+        //         success: function(response) {
+        //             $("#modalProjectName").text(response.project.name);
+        //             const schedules = response.project.schedule;
+        //             const schedule = schedules.find((schedule) => schedule.id == scheduleId);
+
+        //             if (schedule) {
+        //                 $("#currentSchedule").text(schedule.title)
+        //                 $("#modalScheduleName").text(schedule.title);
+        //             } else {
+        //                 $("#modalScheduleName").text("No Schedule");
+        //             }
+        //             const task = schedule.task.find((task) => task.id == taskId);
+        //             if (task) {
+        //                 $("#modalTaskTitle").text(task.taskTitle);
+
+        //                 function formatDate(dateString) {
+        //                     const date = new Date(dateString);
+        //                     return new Intl.DateTimeFormat('en-US', {
+        //                         month: 'long',
+        //                         day: 'numeric',
+        //                         year: 'numeric'
+        //                     }).format(date);
+        //                 }
+
+        //                 const modalDueDate = $("#modalDueDate");
+        //                 if (task.description) {
+        //                     $("#disSpan").text(task.description);
+        //                     $("#modalTaskDescription").text(task.description);
+        //                 }
+        //                 if (task.dueDate) {
+        //                     modalDueDate.text(formatDate(task.dueDate));
+        //                 }
+        //                 const scheduleList = $("#scheduleList");
+        //                 scheduleList.empty();
+
+        //                 if (schedules.length > 0) {
+        //                     schedules.forEach((schedule) => {
+        //                         scheduleList.attr('selectScheduleId', schedule.id).append(
+        //                             '<div class="selectSchedule flex cursor-pointer items-center px-4 py-2 text-xs text-gray-600 hover:bg-gray-200">' +
+        //                             schedule.title + '</div>');
+        //                     });
+        //                 }
+
+        //                 if (task.checkout.length > 0) {
+        //                     const checkoutToAdd = $("#checkoutToAdd");
+        //                     checkoutToAdd.empty();
+        //                     task.checkout.forEach((checkOut) => {
+        //                         const checkOutContainer = $("<div>").addClass('flex items-center my-2');
+        //                         const checkbox = $('<input>').attr('type', 'checkbox').addClass(
+        //                             'ui-checkbox mx-2');
+
+        //                         const checkoutContent = $('<div>').addClass('text-gray-500 text-sm')
+        //                             .text(checkOut.checkoutName);
+        //                         checkOutContainer.append(checkbox, checkoutContent);
+        //                         checkoutToAdd.append(checkOutContainer);
+
+        //                         // Check if checkout is completed
+        //                         if (checkOut.completed === 1) {
+        //                             checkbox.prop('checked', true);
+        //                         }
+        //                     });
+        //                     const completedCheckout = task.checkout.filter((item) => item.completed === 1);
+        //                     $("#totalCheckout").text(task.checkout.length);
+        //                     $("#doneCheckout").text(completedCheckout.length);
+        //                 }
+
+        //                 if (task.comment.length > 0) {
+        //                     $("#commentCount").text(task.comment.length > 0 ? task.comment.length : 0);
+        //                     const commentContainer = $("#commentContainer");
+        //                     // Function to format the date
+        //                     function formatDateWithSec(dateString) {
+        //                         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        //                         const date = new Date(dateString);
+        //                         const day = ("0" + date.getDate()).slice(-2);
+        //                         const month = months[date.getMonth()];
+        //                         const hours = ("0" + date.getHours()).slice(-2);
+        //                         const minutes = ("0" + date.getMinutes()).slice(-2);
+        //                         const seconds = ("0" + date.getSeconds()).slice(-2);
+        //                         return `${day} ${month} - ${hours}:${minutes}:${seconds}`;
+        //                     }
+        //                     task.comment.forEach((commentItem) => {
+        //                         const commentDiv = $("<div>").addClass('flex mt-2').append(
+        //                             $("<div>").addClass('ml-4 flex-1')
+        //                             .append(
+        //                                 $("<div>").addClass('flex items-center justify-between')
+        //                                 .append(
+        //                                     $("<div>").addClass('flex items-center space-x-2')
+        //                                     .append(
+        //                                         $("<div>").addClass('text-gray-600 font-semibold')
+        //                                         .text(commentItem.user.name),
+        //                                         $("<div>").addClass('text-gray-500 text-xs mt-1')
+        //                                         .text(formatDateWithSec(commentItem.created_at))
+        //                                     ),
+        //                                     $("<span>").addClass('cursor-pointer deleteComment')
+        //                                     .attr('delCommentId', commentItem.id)
+        //                                     .append(
+        //                                         `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-3.5 w-3.5 ltr:mr-2 rtl:ml-2" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke="#6B7280" fill="none" stroke-width="1.5px"></path></svg>`
+        //                                     ),
+        //                                     $("<div>").addClass(
+        //                                         'flex items-center space-x-1 bg-white deleteC'
+        //                                     ).css('display', 'none').append(
+        //                                         $("<span>").addClass('text-sm text-gray-800').text(
+        //                                             'Are you sure to delete?'),
+        //                                         $("<span>").addClass('cursor-pointer yesDelete')
+        //                                         .append(
+        //                                             `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 cursor-pointer text-green-600 hover:text-green-800 ltr:mr-1 rtl:ml-1" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="#16A34A" fill="none" stroke-width="1.5px"></path></svg>`
+        //                                         ),
+        //                                         $("<span>").addClass('cursor-pointer noDelete')
+        //                                         .append(
+        //                                             `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 cursor-pointer text-red-600 hover:text-red-800" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="#DC2626" fill="none" stroke-width="1.5px"></path></svg>`
+        //                                         )
+        //                                     )
+        //                                 ),
+        //                                 $("<p>").addClass('pt-1 text-sm text-gray-500').text(
+        //                                     commentItem.taskComment)
+        //                             )
+        //                         );
+        //                         commentContainer.append(commentDiv);
+        //                     });
+        //                 }
+        //             }
+        //         }
+        //     });
+        // }
+
+        function fetchCheckOut(taskId) {
             return $.ajax({
                 type: "GET",
-                url: "{{ route('project', ['id' => ':id']) }}".replace(':id', projectId),
+                url: "{{ route('task.show', ['id' => ':id']) }}".replace(':id', taskId),
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
                 success: function(response) {
-                    $("#modalProjectName").text(response.project.name);
-                    const schedules = response.project.schedule;
-                    const schedule = schedules.find((schedule) => schedule.id == scheduleId);
+                    if (response.checkout.length > 0) {
+                        const checkoutToAdd = $("#checkoutToAdd");
+                        checkoutToAdd.empty();
+                        response.checkout.forEach((checkOut) => {
+                            const checkOutContainer = $("<div>").addClass('flex items-center my-2');
+                            const checkbox = $('<input>').attr('type', 'checkbox').addClass(
+                                'ui-checkbox mx-2').data('checkBoxId', checkOut.id);
 
-                    if (schedule) {
-                        $("#currentSchedule").text(schedule.title)
-                        $("#modalScheduleName").text(schedule.title);
-                    } else {
-                        $("#modalScheduleName").text("No Schedule");
-                    }
-                    const task = schedule.task.find((task) => task.id == taskId);
-                    if (task) {
-                        $("#modalTaskTitle").text(task.taskTitle);
+                            const checkoutContent = $('<div>').addClass('text-gray-500 text-sm')
+                                .text(checkOut.checkoutName);
+                            checkOutContainer.append(checkbox, checkoutContent);
+                            checkoutToAdd.append(checkOutContainer);
 
-                        function formatDate(dateString) {
-                            const date = new Date(dateString);
-                            return new Intl.DateTimeFormat('en-US', {
-                                month: 'long',
-                                day: 'numeric',
-                                year: 'numeric'
-                            }).format(date);
-                        }
-
-                        const modalDueDate = $("#modalDueDate");
-                        if (task.description) {
-                            $("#disSpan").text(task.description);
-                            $("#modalTaskDescription").text(task.description);
-                        }
-                        if (task.dueDate) {
-                            modalDueDate.text(formatDate(task.dueDate));
-                        }
-                        const scheduleList = $("#scheduleList");
-                        scheduleList.empty();
-
-                        if (schedules.length > 0) {
-                            schedules.forEach((schedule) => {
-                                scheduleList.attr('selectScheduleId', schedule.id).append(
-                                    '<div class="selectSchedule flex cursor-pointer items-center px-4 py-2 text-xs text-gray-600 hover:bg-gray-200">' +
-                                    schedule.title + '</div>');
-                            });
-                        }
-
-                        if (task.checkout.length > 0) {
-                            const checkoutToAdd = $("#checkoutToAdd");
-                            checkoutToAdd.empty();
-                            task.checkout.forEach((checkOut) => {
-                                const checkOutContainer = $("<div>").addClass('flex items-center my-2');
-                                const checkbox = $('<input>').attr('type', 'checkbox').addClass(
-                                    'ui-checkbox mx-2');
-
-                                const checkoutContent = $('<div>').addClass('text-gray-500 text-sm')
-                                    .text(checkOut.checkoutName);
-                                checkOutContainer.append(checkbox, checkoutContent);
-                                checkoutToAdd.append(checkOutContainer);
-
-                                // Check if checkout is completed
-                                if (checkOut.completed === 1) {
-                                    checkbox.prop('checked', true);
-                                }
-                            });
-                            const completedCheckout = task.checkout.filter((item) => item.completed === 1);
-                            $("#totalCheckout").text(task.checkout.length);
-                            $("#doneCheckout").text(completedCheckout.length);
-                        }
-
-                        if (task.comment.length > 0) {
-                            $("#commentCount").text(task.comment.length > 0 ? task.comment.length : 0);
-                            const commentContainer = $("#commentContainer");
-                            // Function to format the date
-                            function formatDateWithSec(dateString) {
-                                const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
-                                    "Oct", "Nov", "Dec"
-                                ];
-                                const date = new Date(dateString);
-                                const day = ("0" + date.getDate()).slice(-2);
-                                const month = months[date.getMonth()];
-                                const hours = ("0" + date.getHours()).slice(-2);
-                                const minutes = ("0" + date.getMinutes()).slice(-2);
-                                const seconds = ("0" + date.getSeconds()).slice(-2);
-                                return `${day} ${month} - ${hours}:${minutes}:${seconds}`;
+                            // Check if checkout is completed
+                            if (checkOut.completed === 1) {
+                                checkbox.prop('checked', true);
                             }
-                            task.comment.forEach((commentItem) => {
-                                const commentDiv = $("<div>").addClass('flex').append(
-                                    $("<div>").addClass('ml-4 flex-1')
-                                    .append(
-                                        $("<div>").addClass('flex items-center justify-between')
-                                        .append(
-                                            $("<div>").addClass('flex items-center space-x-2')
-                                            .append(
-                                                $("<div>").addClass('text-gray-600 font-semibold')
-                                                .text(commentItem.user.name),
-                                                $("<div>").addClass('text-gray-500 text-xs mt-1')
-                                                .text(formatDateWithSec(commentItem.created_at))
-                                            ),
-                                            $("<span>").addClass('cursor-pointer deleteComment')
-                                            .attr('delCommentId', commentItem.id)
-                                            .append(
-                                                `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-3.5 w-3.5 ltr:mr-2 rtl:ml-2" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke="#6B7280" fill="none" stroke-width="1.5px"></path></svg>`
-                                            ),
-                                            $("<div>").addClass(
-                                                'flex items-center space-x-1 bg-white deleteC'
-                                            ).css('display', 'none').append(
-                                                $("<span>").addClass('text-sm text-gray-800').text(
-                                                    'Are you sure to delete?'),
-                                                $("<span>").addClass('cursor-pointer yesDelete')
-                                                .append(
-                                                    `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 cursor-pointer text-green-600 hover:text-green-800 ltr:mr-1 rtl:ml-1" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="#16A34A" fill="none" stroke-width="1.5px"></path></svg>`
-                                                ),
-                                                $("<span>").addClass('cursor-pointer noDelete')
-                                                .append(
-                                                    `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 cursor-pointer text-red-600 hover:text-red-800" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="#DC2626" fill="none" stroke-width="1.5px"></path></svg>`
-                                                )
-                                            )
-                                        ),
-                                        $("<p>").addClass('pt-1 text-sm text-gray-500').text(
-                                            commentItem.taskComment)
-                                    )
-                                );
-                                commentContainer.append(commentDiv);
-                            });
-                        }
+                        });
+                        const completedCheckout = response.checkout.filter((item) => item.completed === 1);
+                        $("#totalCheckout").text(response.checkout.length);
+                        $("#doneCheckout").text(completedCheckout.length);
+                    } else {
+
                     }
                 }
             });
         }
 
+        $(document).on('click', '.ui-checkbox', function() {
+            const checkOutId = $(this).data('checkBoxId');
+            const isChecked = $(this).prop('checked');
+            console.log(isChecked);
+            if (isChecked) {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('checkout.update', ['id' => ':id']) }}".replace(':id', checkOutId),
+                    data: {
+                        checked: 1,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        fetchCheckOut(currentTaskId);
+                        fetchSchedule();
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('checkout.update', ['id' => ':id']) }}".replace(':id', checkOutId),
+                    data: {
+                        unChecked: 0,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        fetchCheckOut(currentTaskId);
+                        fetchSchedule();
+                    }
+                });
+            }
+        });
+
+        $(document).on('click', '', function() {
+
+        });
+
+
+        function fetchComments(taskId) {
+            return $.ajax({
+                type: "GET",
+                url: "{{ route('task.show', ['id' => ':id']) }}".replace(':id', taskId),
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.comment.length > 0) {
+                        $("#commentCount").text(response.comment.length);
+                        const commentContainer = $("#commentContainer");
+                        commentContainer.empty(); // Clear the existing comments
+
+                        // Function to format the date
+                        function formatDateWithSec(dateString) {
+                            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+                                "Oct", "Nov", "Dec"
+                            ];
+                            const date = new Date(dateString);
+                            const day = ("0" + date.getDate()).slice(-2);
+                            const month = months[date.getMonth()];
+                            const hours = ("0" + date.getHours()).slice(-2);
+                            const minutes = ("0" + date.getMinutes()).slice(-2);
+                            const seconds = ("0" + date.getSeconds()).slice(-2);
+                            return `${day} ${month} - ${hours}:${minutes}:${seconds}`;
+                        }
+                        response.comment.forEach((commentItem) => {
+                            const commentDiv = $("<div>").addClass('flex mt-2').append(
+                                $("<div>").addClass('ml-4 flex-1').append(
+                                    $("<div>").addClass('flex items-center justify-between')
+                                    .append(
+                                        $("<div>").addClass('flex items-center space-x-2')
+                                        .append(
+                                            $("<div>").addClass('text-gray-600 font-semibold')
+                                            .text(
+                                                commentItem.user.name),
+                                            $("<div>").addClass('text-gray-500 text-xs mt-1')
+                                            .text(
+                                                formatDateWithSec(commentItem.created_at))
+                                        ),
+                                        $("<span>").addClass('cursor-pointer deleteComment')
+                                        .attr(
+                                            'delCommentId', commentItem.id).append(
+                                            `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-3.5 w-3.5 ltr:mr-2 rtl:ml-2" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke="#6B7280" fill="none" stroke-width="1.5px"></path></svg>`
+                                        ),
+                                        $("<div>").addClass(
+                                            'flex items-center space-x-1 bg-white deleteC').css(
+                                            'display', 'none').append(
+                                            $("<span>").addClass('text-sm text-gray-800').text(
+                                                'Are you sure to delete?'),
+                                            $("<span>").addClass('cursor-pointer yesDelete')
+                                            .append(
+                                                `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 cursor-pointer text-green-600 hover:text-green-800 ltr:mr-1 rtl:ml-1" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="#16A34A" fill="none" stroke-width="1.5px"></path></svg>`
+                                            ),
+                                            $("<span>").addClass('cursor-pointer noDelete')
+                                            .append(
+                                                `<svg xmlns:xlink="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 cursor-pointer text-red-600 hover:text-red-800" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="#DC2626" fill="none" stroke-width="1.5px"></path></svg>`
+                                            )
+                                        )
+                                    ),
+                                    $("<p>").addClass('pt-1 text-sm text-gray-500').text(
+                                        commentItem
+                                        .taskComment)
+                                )
+                            );
+                            commentContainer.append(commentDiv);
+                        });
+                    } else {
+                        $("#commentCount").text(0);
+                        const commentContainer = $("#commentContainer");
+                        commentContainer.empty(); // Clear the existing comments
+                    }
+                }
+            });
+        }
+
+        $(document).on('click', '.deleteComment', function() {
+            const delCommentId = $(this).attr('delCommentId');
+            $(document).off('click', '.yesDelete'); // Remove previous listeners to avoid duplicate triggers
+            $(document).on('click', '.yesDelete', function() {
+                $.ajax({
+                    type: "DELETE",
+                    url: "{{ route('comment.delete', ['id' => ':id']) }}".replace(':id',
+                        delCommentId),
+                    data: {
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        fetchComments(currentTaskId);
+                        fetchSchedule();
+                    }
+                });
+            });
+        });
+
+
         // Toggle visibility function
+
         function toggleVisibility(hideSelector, showSelector) {
             $(hideSelector).hide();
             $(showSelector).show();
@@ -518,22 +690,7 @@
             $('.deleteC').eq(index).show();
         })
 
-        $(document).on('click', '.deleteComment', function() {
-            const delCommentId = $(this).attr('delCommentId');
-            $(document).on('click', '.yesDelete', function() {
-                $.ajax({
-                    type: "DELETE",
-                    url: "{{ route('comment.delete', ['id' => ':id']) }}".replace(':id',
-                        delCommentId),
-                    data: {
-                        _token: "{{ csrf_token() }}"
-                    },
-                    success: function(response) {
-                        console.log(response);
-                    }
-                });
-            })
-        })
+
 
         $(document).on('click', '.noDelete', function() {
             let index = $(".noDelete").index(this);
@@ -543,21 +700,6 @@
 
 
 
-        function clearModalContent() {
-            // Clear or reset all modal content
-            $("#modalProjectName").text("");
-            $("#modalScheduleName").text("");
-            $("#modalTaskTitle").text("");
-            $("#disSpan").text("");
-            $("#modalTaskDescription").text("");
-            $("#modalDueDate").text("");
-            $("#scheduleList").empty();
-            $("#checkoutToAdd").empty();
-            $("#totalCheckout").text("0");
-            $("#doneCheckout").text("0");
-            $("#commentContainer").empty();
-            $("#commentCount").text("0");
-        }
         // Delete Task
 
         $(document).on('click', '.openModal', function() {
