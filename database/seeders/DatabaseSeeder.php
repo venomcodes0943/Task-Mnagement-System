@@ -27,8 +27,8 @@ class DatabaseSeeder extends Seeder
         Project::factory(5)->create();
         Schedule::factory(10)->create();
         Task::factory(40)->create();
-        Comment::factory(5)->create();
-        Checkout::factory(8)->create();
+        Comment::factory(35)->create();
+        Checkout::factory(60)->create();
 
     }
 }

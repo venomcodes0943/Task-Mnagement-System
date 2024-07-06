@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\TaskController;
@@ -32,6 +33,11 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('schedule/delete/{id}', [ScheduleController::class, 'destroy'])->name('schedule.delete');
 
     Route::post('task/create', [TaskController::class, 'store'])->name('task.store');
-    Route::get('/task/{id}', [TaskController::class, 'taskDataForModal'])->name('taskForModal');
+    Route::delete('/task/delete/{id}', [TaskController::class, 'delete'])->name('task.delete');
+
+
+
+
+    Route::delete('comment/delete/{id}', [CommentController::class, 'delete'])->name('comment.delete');
 
 });
