@@ -394,6 +394,7 @@
 
 
 
+
         function fetchForTask(projectId, taskId, scheduleId) {
             return $.ajax({
                 type: "GET",
@@ -425,9 +426,12 @@
                         }
 
                         const modalDueDate = $("#modalDueDate");
+                        modalDueDate.text('Due Date');
 
+                        const taskDueDate = $("#taskDueDate").val('');
                         if (task.dueDate) {
                             modalDueDate.text(formatDate(task.dueDate));
+                            taskDueDate.val(task.dueDate);
                         }
 
                         $('.taskCompleteCheck').prop('checked', false);
@@ -450,6 +454,7 @@
                 }
             });
         }
+
 
 
         function fetchDescription(taskId) {
@@ -491,9 +496,23 @@
                 }
             });
         });
-        $(document).on('input', '#taskDueDate', function() {
-            const dueDate = $("#taskDueDate").val();
-            console.log(dueDate);
+
+        $(document).on('change', '#taskDueDate', function() {
+            const myDueDate = $("#taskDueDate").val();
+            $.ajax({
+                type: "POST",
+                url: "{{ route('task.update', ['id' => ':id']) }}".replace(':id', currentTaskId),
+                data: {
+                    dueDate: myDueDate,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    fetchSchedule();
+                    const task = response.schedule.task.find((task) => task.id == currentTaskId);
+                    const modalDueDate = $("#modalDueDate");
+                    modalDueDate.text(formatDate(task.dueDate));
+                }
+            });
         });
 
 

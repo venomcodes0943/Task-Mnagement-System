@@ -243,7 +243,7 @@
                             <div class="relative z-40">
                                 <div class="w-full absolute top-2 py-1 bg-white rounded-md border shadow-lg max-h-24 overflow-y-auto px-3"
                                     x-show='open'>
-                                    <input type="date" name="" class="outline-none" id="taskDueDate">
+                                    <input type="date" name="" class="outline-none" id="taskDueDate" >
                                 </div>
                             </div>
                         </section>

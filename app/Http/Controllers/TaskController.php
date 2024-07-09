@@ -71,6 +71,11 @@ class TaskController extends Controller
         if ($request->has('uncompleted')) {
             $task->completed = $request->uncompleted;
         }
+
+        if ($request->has('dueDate')) {
+            $task->dueDate = $request->dueDate;
+        }
+
         try {
             $task->save();
             $updatedSchedule = Schedule::find($task->schedule_id);

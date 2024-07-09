@@ -6,7 +6,7 @@
         <x-mainPageTitle :title="__('My Tasks')" class="" />
 
         {{-- Page Content  --}}
-        <div class="bg-white rounded-lg w-full block shadow-md">
+        {{-- <div class="bg-white rounded-lg w-full block shadow-md">
             <div class="px-6 py-4 text-slate-900 border-b border-b-gray-200">
                 <span class="font-semibold ">Due date</span>
                 <span class="duedatecount"></span>
@@ -14,8 +14,8 @@
             <div class="flex flex-wrap items-center px-6 pt-4 pb-4 justify-between" id="dueDateTasks">
 
             </div>
-        </div>
-        <div class="bg-white rounded-lg w-full shadow-md mt-3 py-16 px-6 hidden" id="noMyTasks">
+        </div> --}}
+        <div class="bg-white rounded-lg w-full shadow-md mt-3 py-16 px-6" id="noMyTasks">
             <div class="flex flex-col items-center justify-center">
                 <span>
                     <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="65"
