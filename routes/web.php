@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    $peojects = Project::all();
     return view('index');
 })->middleware('auth')->name('index');
 
@@ -21,6 +20,8 @@ Route::group(['controller' => UserController::class], function () {
     Route::get('register', 'register')->name('register');
     Route::post('register', 'registerSave')->name('registerSave');
     Route::get('logout', 'logout')->name('logout');
+    Route::get('profile', 'profile')->name('profile')->middleware('auth');
+    Route::post('update', 'update')->name('user.update');
 });
 
 Route::middleware(['auth'])->group(function () {

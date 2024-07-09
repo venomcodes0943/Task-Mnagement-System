@@ -154,12 +154,8 @@
                 </div>
                 <div class="flex items-center">
                     <x-navProfile>
-                        <x-slot name="userPicture">
-                            <x-userPicture class="w-6 h-6" :about="__(auth()->user()->userRole ? auth()->user()->userRole : 'User')" :user="__('https://i.pinimg.com/564x/41/95/7a/41957adcf44b1059bc46a0afda76418a.jpg')" />
-                        </x-slot>
-
                         <x-slot name="userName">
-                            <span class="font-medium">{{ auth()->user()->name ? auth()->user()->name : 'User' }}</span>
+                            <span class="font-medium" id="profileName"></span>
                         </x-slot>
 
                         <div class="px-3 pb-1">
@@ -377,6 +373,26 @@
                 ldcvTaskModal.toggle();
             });
         }
+
+        function profile() {
+            return $.ajax({
+                type: "GET",
+                url: "{{ route('profile') }}",
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    $("#profileName").text(response.name);
+                    const imageUrl = `/storage/avatars/${response.profileImage}`;
+                    $("#userImg").attr('src', imageUrl);
+                    $(".userPageImg").attr('src', imageUrl);
+                }
+            });
+        }
+
+        profile();
+
+
 
         function fetchForTask(projectId, taskId, scheduleId) {
             return $.ajax({
@@ -1072,6 +1088,40 @@
                 });
 
             }
+        });
+
+
+
+
+        $(document).on('click', '#updateMe', function() {
+            const formData = new FormData();
+            const fileInput = document.getElementById('userAvatar');
+            if (fileInput.files.length > 0) {
+                formData.append('profileImage', fileInput.files[0]);
+            }
+            const newName = $("#userName").val();
+            const newPass = $("#password").val();
+
+            formData.append('name', newName);
+            formData.append('password', newPass);
+            formData.append('_token', '{{ csrf_token() }}');
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('user.update') }}",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log(response);
+
+                    profile();
+                },
+                error: function(xhr, status, errors) {
+                    console.error('Error fetching projects:', xhr, 'Status:', status, 'Errors:',
+                        errors);
+                }
+            });
         });
     </script>
 </body>

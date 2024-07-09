@@ -15,7 +15,6 @@
 
             </div>
         </div>
-
         <div class="bg-white rounded-lg w-full shadow-md mt-3 py-16 px-6 hidden" id="noMyTasks">
             <div class="flex flex-col items-center justify-center">
                 <span>
@@ -36,6 +35,5 @@
         {{-- Task Modal --}}
         <x-taskModal />
         <script src="{{ asset('assets/js/index.js') }}"></script>
+    </div>
 </x-app-layout>
-
-

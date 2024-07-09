@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -56,5 +57,46 @@ class UserController extends Controller
     {
         Auth::logout();
         return redirect()->route('login');
+    }
+
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+        if ($user) {
+            $validatedData = $request->validate([
+                'profileImage' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'name' => 'required|string|max:255',
+                'password' => 'nullable|string|min:8',
+            ]);
+
+            $user->name = $validatedData['name'];
+            if ($request->has('profileImage')) {
+                $file = $request->file('profileImage');
+                $path = $file->storeAs('public/avatars', $file->getClientOriginalName());
+                $user->profileImage = $file->getClientOriginalName();
+            }
+
+            if (!empty($validatedData['password'])) {
+                $user->password = Hash::make($validatedData['password']);
+            }
+
+            $user->save();
+
+            return response()->json(['message' => 'Profile updated successfully.', 'file' => $request->profileImage]);
+        }
+
+        return response()->json(['error' => 'User not authenticated.'], 401);
+    }
+
+
+
+    public function profile(Request $request)
+    {
+        if ($request->ajax()) {
+            return $user = auth()->user();
+        }
+
+        $user = auth()->user();
+        return view('profile', compact('user'));
     }
 }

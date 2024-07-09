@@ -1,6 +1,6 @@
 <div class="flex items-center">
     <div class="px-2">
-        {{ $userPicture }}
+        <img src="" id="userImg" alt="" class="w-8 h-8 rounded-full" id="">
     </div>
     <div class="relative md:mr-5" x-data="{ open: false }">
         <div class="flex items-center gap-x-1 cursor-pointer" @click="open = !open">
@@ -25,7 +25,7 @@
             </div>
             <ul class="py-1">
                 <li class="block py-1 px-3 text-gray-700 hover:bg-slate-100">
-                    <a href="#" class="block">Profile</a>
+                    <a href="{{ route('profile') }}" class="block">Profile</a>
                 </li>
                 <li class="block py-1 px-3 text-gray-700 hover:bg-slate-100">
                     <a href="{{ route('logout') }}" class="block">Logout</a>
