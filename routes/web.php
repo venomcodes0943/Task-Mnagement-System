@@ -35,11 +35,15 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('task/create', [TaskController::class, 'store'])->name('task.store');
     Route::get('task/show/{id}', [TaskController::class, 'show'])->name('task.show');
-    Route::delete('/task/delete/{id}', [TaskController::class, 'delete'])->name('task.delete');
+    Route::delete('task/delete/{id}', [TaskController::class, 'delete'])->name('task.delete');
+    Route::post('task/update/{id}', [TaskController::class, 'update'])->name('task.update');
 
 
+    Route::post('checkout/create', [CheckoutController::class, 'create'])->name('checkout.create');
     Route::post('checkout/update/{id}', [CheckoutController::class, 'update'])->name('checkout.update');
+    Route::delete('checkout/delete/{id}', [CheckoutController::class, 'delete'])->name('checkout.delete');
 
     Route::delete('comment/delete/{id}', [CommentController::class, 'delete'])->name('comment.delete');
+    Route::post('comment/create', [CommentController::class, 'create'])->name('comment.create');
 
 });

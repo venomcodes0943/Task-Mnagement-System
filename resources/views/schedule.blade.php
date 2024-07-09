@@ -28,7 +28,9 @@
                         @endforeach
                     </div>
                 </div>
-                <nav class="md:ml-16 flex items-center">
+
+
+                {{-- <nav class="md:ml-16 flex items-center">
                     <a href="#" class="flex items-center rounded bg-slate-200 px-2 py-1 gap-x-2">
                         <span>
                             <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
@@ -55,8 +57,8 @@
                         </span>
                         <span class="text-slate-800">List</span>
                     </a>
-                </nav>
-                <div class="md:ml-12 flex items-center">
+                </nav> --}}
+                {{-- <div class="md:ml-12 flex items-center">
                     <x-userPicture class="w-6 h-6" :about="'Manager'" :users="__(
                         'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                     )" />
@@ -78,11 +80,11 @@
                                 stroke="#4B5563" fill="none" stroke-width="1.5px"></path>
                         </svg>
                     </span>
-                </div>
+                </div> --}}
 
                 {{-- ------------------Member Modal----------------------- --}}
 
-                <div class="ldcv" id="memberModal">
+                {{-- <div class="ldcv" id="memberModal">
                     <div class="base">
                         <div class="inner">
                             <div class="max-w-[750px] md:w-[550px] lg:w-[750px] max-h-[590px] overflow-auto">
@@ -189,7 +191,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </header>
             {{-- --------------------Task's Lists----------------------- --}}
             <main class="relative">
@@ -234,8 +236,11 @@
 
     {{-- Task Modal --}}
     <x-taskModal />
+
+
     <script src="{{ asset('assets/js/index.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
+
     <script>
         ! function() {
             var s, o;
@@ -446,7 +451,7 @@
 
                         // Schedule Title Div
                         const schduelTitleDiv = $('<div>').addClass(
-                            'flex items-center justify-between p-2 px-3'
+                            'flex items-center justify-between py-2.5 px-1  md:px-3'
                         ).attr('x-data', '{ show: false }');
 
                         // Alpine div to delete the Schedule
@@ -461,14 +466,14 @@
                         // Schedule Title
                         const scheduleTitle = schedule.title;
                         const schduleTitleSpan = $('<h1>').addClass(
-                            'scheduleupdate rounded px-2 font-medium py-0.5 text-gray-800 hover:bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600 cursor-pointer min-w-56'
+                            'scheduleupdate rounded px-2 font-medium py-0.5 text-gray-800 hover:bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600 cursor-pointer md:min-w-56 min-w-18 overflow-x-hidden text-sm md:text-base'
                         ).text(scheduleTitle).attr('contenteditable', 'true').attr('spellcheck',
                             'false').data('update_id',
                             schedule.id);
 
                         // Toggle button for showing/hiding delete option
                         const schduleToggleSpan = $('<span>').addClass(
-                            'text-gray-600 font-semibold py-1 px-2 rounded-md hover:bg-slate-300 cursor-pointer'
+                            'text-gray-600 font-semibold px-1 py-2 md:py-1 md:px-2 rounded-md hover:bg-slate-300 cursor-pointer'
                         ).attr('x-on:click', 'show = !show');
                         const toggleIcon =
                             `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="w-5" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" stroke="#000000" fill="none" stroke-width="1.5px"></path></svg>`;
@@ -610,16 +615,25 @@
             // Create the main container
             const taskCard = $('<div>', {
                 class: 'mb-2 openModal cursor-pointer bg-white rounded-lg px-3 py-1 text-gray-700 shadow hover:shadow-md'
-
             });
             taskCard.attr('project_id', projectId);
             taskCard.attr('task_id', task.id);
             taskCard.attr('schedule_id', scheduleId);
             // Create the title
-            const taskTitle = $('<div>', {
-                class: 'py-1.5 text-gray-700',
-                text: task.taskTitle
-            }).appendTo(taskCard);
+            let taskTitle;
+            if (task.completed === 0) {
+                taskTitle = $('<div>', {
+                    class: 'py-1.5 text-gray-700',
+                    text: task.taskTitle
+                }).appendTo(taskCard);
+
+            } else {
+                taskTitle = $('<div>', {
+                    class: 'py-1.5 text-gray-700 line-through',
+                    text: task.taskTitle
+                }).appendTo(taskCard);
+
+            }
 
             // Create the flex container
             const flexContainer = $('<div>', {
@@ -695,7 +709,7 @@
                 ).appendTo(leftFlexContainer);
                 $('<span>', {
                     class: 'text-gray-500 text-xs',
-                    text:task.comment.length
+                    text: task.comment.length
                 }).appendTo(leftFlexContainer);
             }
 
@@ -733,16 +747,12 @@
                             }
                         },
                         error: function(xhr, status, error) {
-                            if (xhr.status === 422) {
-                                let response = JSON.parse(xhr.responseText);
-                                let errors = response[1].name[0];
-                                $("#errorMessages").text(errors).show();
-                                setTimeout(() => {
-                                    $("#errorMessages").hide();
-                                }, 2500);
+                            if ($("#projectName").attr('contenteditable') !== 'true') {
+                                $("#projectName").attr('contenteditable', 'true');
                             }
                             fetchSchedule();
                             fetchSideProjects();
+                            console.log(xhr.responseJSON);
                         }
                     });
                 }
@@ -769,14 +779,7 @@
                             fetchSideProjects();
                         },
                         error: function(xhr, status, error) {
-                            if (xhr.status === 422) {
-                                let response = JSON.parse(xhr.responseText);
-                                let errors = response[1].name[0];
-                                $("#errorMessages").text(errors).show();
-                                setTimeout(() => {
-                                    $("#errorMessages").hide();
-                                }, 2500);
-                            }
+                            console.log(xhr.responseJSON);
                         }
                     });
                 }
@@ -887,4 +890,5 @@
             });
         });
     </script>
+
 </x-app-layout>

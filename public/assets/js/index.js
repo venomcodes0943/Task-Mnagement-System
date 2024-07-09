@@ -22,6 +22,7 @@ cancelDelete.addEventListener('click', function () {
 const disSpan = document.getElementById('disSpan');
 const disToWrite = document.getElementById('disToWrite');
 const cancelToWrite = document.getElementById('cancelToWrite');
+const modalOff = document.getElementById("modalOff");
 
 function toggleVisibility(hiddenElement, visibleElement) {
     hiddenElement.classList.add('hidden');
@@ -35,6 +36,11 @@ disSpan.addEventListener('click', function () {
 cancelToWrite.addEventListener('click', function () {
     toggleVisibility(disToWrite, disSpan);
 });
+
+modalOff.addEventListener('click', function () {
+    toggleVisibility(disToWrite, disSpan);
+});
+
 
 // Checkout List
 
@@ -62,16 +68,3 @@ comment.addEventListener('click', function () {
 cancelComment.addEventListener('click', function () {
     toggleVisibility(writeComment, comment);
 });
-
-// Task Add
-
-// const addTask = document.querySelectorAll('.addTask');
-// const writetask = document.querySelectorAll('.writetask');
-// const cancelTask = document.querySelectorAll('.cancelTask');
-
-// addTask.addEventListener('click', function () {
-//     toggleVisibility(addTask, writetask);
-// })
-// cancelTask.addEventListener('click', function () {
-//     toggleVisibility(writetask, addTask);
-// });

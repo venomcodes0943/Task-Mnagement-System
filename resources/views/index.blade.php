@@ -8,45 +8,34 @@
         {{-- Page Content  --}}
         <div class="bg-white rounded-lg w-full block shadow-md">
             <div class="px-6 py-4 text-slate-900 border-b border-b-gray-200">
-                <span class="font-semibold ">No due date</span>
-                <span>(1)</span>
+                <span class="font-semibold ">Due date</span>
+                <span class="duedatecount"></span>
             </div>
-            <div class="flex flex-wrap items-center px-6 pt-4 pb-4 justify-between">
-                <div class="flex items-start">
-                    {{-- <x-checkbox /> --}}
-                    <input type="checkbox" class="ui-checkbox mx-2s">
-                    <div class="pl-4">
-                        <span
-                            class="block text-slate-900 -mt-[2px] cursor-pointer hover:underline font-semibold openModal w-max">TaskTitle</span>
-                        <div class="flex items-center mt-2 gap-x-2">
-                            <span>
-                                <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                    aria-hidden="true" data-slot="icon" class="h-4 w-4 text-gray-400" width="24"
-                                    height="24">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
-                                        stroke="#9CA3AF" fill="none" stroke-width="1.5px"></path>
-                                </svg>
-                            </span>
-                            <span class="text-sm text-gray-500">Jun 20, 2024</span>
-                            <div class="flex md:pl-4 items-center space-x-2">
-                                <span class="rounded-full w-2 h-2 bg-red-500"></span>
-                                <span class="text-sm text-slate-500 hover:underline cursor-pointer">Task
-                                    Management</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center -space-x-2">
-                    <x-userPicture class="w-6 h-6" :about="'Manager'" :users="__(
-                        'https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                    )" />
-                </div>
+            <div class="flex flex-wrap items-center px-6 pt-4 pb-4 justify-between" id="dueDateTasks">
+
             </div>
         </div>
 
+        <div class="bg-white rounded-lg w-full shadow-md mt-3 py-16 px-6 hidden" id="noMyTasks">
+            <div class="flex flex-col items-center justify-center">
+                <span>
+                    <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="65"
+                        height="51" viewBox="0 0 65 51" class="fill-current text-gray-400">
+                        <path
+                            d="M56 40h2c.552285 0 1 .447715 1 1s-.447715 1-1 1h-2v2c0 .552285-.447715 1-1 1s-1-.447715-1-1v-2h-2c-.552285 0-1-.447715-1-1s.447715-1 1-1h2v-2c0-.552285.447715-1 1-1s1 .447715 1 1v2zm-5.364125-8H38v8h7.049375c.350333-3.528515 2.534789-6.517471 5.5865-8zm-5.5865 10H6c-3.313708 0-6-2.686292-6-6V6c0-3.313708 2.686292-6 6-6h44c3.313708 0 6 2.686292 6 6v25.049375C61.053323 31.5511 65 35.814652 65 41c0 5.522847-4.477153 10-10 10-5.185348 0-9.4489-3.946677-9.950625-9zM20 30h16v-8H20v8zm0 2v8h16v-8H20zm34-2v-8H38v8h16zM2 30h16v-8H2v8zm0 2v4c0 2.209139 1.790861 4 4 4h12v-8H2zm18-12h16v-8H20v8zm34 0v-8H38v8h16zM2 20h16v-8H2v8zm52-10V6c0-2.209139-1.790861-4-4-4H6C3.790861 2 2 3.790861 2 6v4h52zm1 39c4.418278 0 8-3.581722 8-8s-3.581722-8-8-8-8 3.581722-8 8 3.581722 8 8 8z"
+                            fill="#9CA3AF"></path>
+                    </svg>
+                </span>
+                <div class="text-gray-600 text-lg mt-4">You have no assigned tasks.</div>
+            </div>
+        </div>
+
+
+
+
         {{-- Task Modal --}}
-        <x-taskModal :taskDetails="true" />
+        <x-taskModal />
         <script src="{{ asset('assets/js/index.js') }}"></script>
 </x-app-layout>
+
+

@@ -10,12 +10,13 @@ class ProjectController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user();
         if ($request->ajax()) {
-            $projects = Project::all();
+            $projects = Project::where('user_id', $user->id)->get();
             return response()->json($projects);
         }
 
-        $projects = Project::all();
+        $projects = Project::where('user_id', $user->id)->get();
         return view('projects', compact('projects'));
     }
 
@@ -33,6 +34,7 @@ class ProjectController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
             'name' => 'required|string|unique:projects,name',
             'color' => 'required|string|max:7'
         ]);
@@ -41,14 +43,19 @@ class ProjectController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
+
         $credentials = [
+            'user_id' => $request->user_id,
             'name' => $request->name,
             'color' => $request->color
         ];
 
-        $project = Project::create($credentials);
-
-        return response()->json(['project' => $project], 201);
+        try {
+            $project = Project::create($credentials);
+            return response()->json(['project' => $project], 201);
+        } catch (\Exception $e) {
+            return response()->json(['Error:' => $e->getMessage()], 500);
+        }
     }
 
 

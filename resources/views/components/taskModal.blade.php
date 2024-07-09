@@ -1,15 +1,15 @@
 <div class="ldcv" id="taskModal">
     <div class="base">
         <div class="inner" style="overflow: auto !important;">
-            <div class="w-[750px] max-h-[590px]">
-                <div class="flex items-center justify-between border-b border-gray-200 shadow-sm">
-                    <div class="flex items-center space-x-2 px-6 text-gray-700">
-                        <div class="w-2 h-2 bg-red-500 rounded-full"></div>
-                        <span id="modalProjectName"></span>
-                        <span>/</span>
-                        <span id="modalScheduleName"></span>
+            <div class="md:w-[550px] lg:w-[680px] max-h-[520px]">
+                <div class="p-2 flex items-center justify-between border-b border-gray-200 shadow-sm">
+                    <div class="flex flex-wrap items-center md:space-x-1 px-2 md:px-4 text-gray-700">
+                        <div class="w-2 h-2 rounded-full" id="modalProjectColor"></div>
+                        <span id="modalProjectName" class="ml-1 text-sm md:text-base"></span>
+                        <span class="mx-1">/</span>
+                        <span id="modalScheduleName" class="text-sm md:text-base"></span>
                     </div>
-                    <span data-ldcv-set="" class="p-2 m-2.5 cursor-pointer hover:bg-slate-300/20 rounded-full">
+                    <span data-ldcv-set="" id="modalOff" class="p-1 md:p-2 cursor-pointer hover:bg-slate-300/20 rounded-full">
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
                             class="h-5 w-5" viewBox="0 0 21 21" width="21" height="21">
                             <g fill="none" fill-rule="evenodd" stroke="#4B5563" stroke-linecap="round"
@@ -20,10 +20,10 @@
                         </svg>
                     </span>
                 </div>
-                <div class="flex ">
-                    <main class="flex-1 px-6 pb-8 pt-6">
+                <div class="flex flex-wrap">
+                    <main class="flex-1 px-2 md:px-6 pb-4 md:pb-8 md:pt-6 pt-3">
                         <div class="flex items-center">
-                            <input type="checkbox" class="ui-checkbox mx-2">
+                            <input type="checkbox" class="ui-checkbox mx-2 taskCompleteCheck">
                             <div class="font-bold outline-none focus:ring-2 cursor-pointer ring-sky-600 rounded-sm px-2 py-0.5"
                                 id="modalTaskTitle" spellcheck="false" contenteditable="true"></div>
                         </div>
@@ -43,9 +43,9 @@
                                 <div class="rounded-md border pt-2 pb-3 px-3 w-full hidden" id="disToWrite">
                                     <textarea id="modalTaskDescription" autofocus
                                         class=" outline-none block h-10 w-full resize-none border-0 p-0 text-sm text-gray-600 placeholder:font-normal placeholder:text-gray-500 focus:ring-0"
-                                        placeholder="Description" style="overflow: hidden; overflow-wrap: break-word; text-align: start; height: 60px;"></textarea>
+                                        placeholder="Description" spellcheck="false" style="overflow: hidden; overflow-wrap: break-word; text-align: start; height: 60px;"></textarea>
                                     <div class="flex items-center mt-4">
-                                        <x-primary-button>
+                                        <x-primary-button id="saveDescription">
                                             Save
                                         </x-primary-button>
                                         <button class="outline-none px-2 font-bold text-sm"
@@ -87,7 +87,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div x-show="show" class="px-8">
+                            <div x-show="show" class="px-2 md:px-8">
                                 <div class="my-3" id="checkoutToAdd"></div>
                                 <div id="addItem"
                                     class="flex items-center mt-4 text-gray-600 hover:text-gray-900 cursor-pointer">
@@ -105,7 +105,7 @@
                                 </div>
                                 <div class="hidden" id="writeItem">
                                     <div class="flex items-center rounded-md p-2 ">
-                                        <input type="text"
+                                        <input type="text" id="addCheckOut"
                                             class="w-full block outline-none pl-3 border border-slate-300 border-r-0 py-1.5 rounded-s-md text-gray-600"
                                             placeholder="Enter checklist item">
                                         <span id="canelWriteItem"
@@ -123,7 +123,7 @@
                                                 </g>
                                             </svg>
                                         </span>
-                                        <span
+                                        <span id="addWriteItem"
                                             class="border border-slate-300 cursor-pointer rounded-r-md hover:bg-slate-700/10 py-2.5 px-4 bg-slate-500/5">
                                             <svg xmlns:xlink="http://www.w3.org/1999/xlink"
                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white"
@@ -168,29 +168,30 @@
                                     <span class="font-medium text-gray-500" id="commentCount">0</span>
                                 </div>
                             </div>
-                            <div x-show="show" class="pl-8">
+                            <div x-show="show" class="pl-2 md:pl-8">
                                 <div id="comment"
                                     class="cursor-pointer mt-3 rounded-md border border-slate-300 px-4 py-2 text-sm text-gray-600 hover:shadow-sm">
                                     Write a comment
                                 </div>
                                 <div class="rounded-md border pt-2 pb-3 px-3 w-full mt-3 hidden" id="writeComment">
-                                    <textarea
+                                    <textarea id="addComment"
                                         class=" outline-none block h-10 w-full resize-none border-0 p-0 text-sm text-gray-600 placeholder:font-normal placeholder:text-gray-500 focus:ring-0"
                                         placeholder="Write a comment"
                                         style="overflow: hidden; overflow-wrap: break-word; text-align: start; height: 60px;"></textarea>
                                     <div class="flex items-center mt-4">
-                                        <x-primary-button>
+                                        <x-primary-button id="saveComment">
                                             Save
                                         </x-primary-button>
                                         <button class="outline-none px-2 font-bold text-sm"
                                             id="cancelComment">Cancel</button>
                                     </div>
                                 </div>
+                                <div id="error-container"></div>
                                 <div class="mt-4" id="commentContainer"></div>
                             </div>
                         </section>
                     </main>
-                    <aside class="w-60 p-6 bg-gray-50">
+                    <aside class="w-full md:w-60 p-6 bg-gray-50">
                         <section class="py-2 border-b pb-3" x-data="{ open: false }">
                             <h2 class="px-2 text-sm font-bold text-gray-600 mb-2">Project List</h2>
                             <div @click="open = !open"
@@ -242,11 +243,11 @@
                             <div class="relative z-40">
                                 <div class="w-full absolute top-2 py-1 bg-white rounded-md border shadow-lg max-h-24 overflow-y-auto px-3"
                                     x-show='open'>
-                                    <input type="date" name="" class="outline-none">
+                                    <input type="date" name="" class="outline-none" id="taskDueDate">
                                 </div>
                             </div>
                         </section>
-                        <section class="py-2 border-b pb-3" x-data="{ open: false }">
+                        {{-- <section class="py-2 border-b pb-3" x-data="{ open: false }">
                             <div class="group flex items-center justify-between  rounded-md px-3 py-1">
                                 <span class="text-sm text-gray-500 font-bold">Assignee</span>
                                 <span @click="open = !open"
@@ -280,7 +281,7 @@
                                     'https://i.pinimg.com/564x/c2/5a/e4/c25ae4d3f7858e110b39a321aa0ad6bb.jpg',
                                 )" />
                             </div>
-                        </section>
+                        </section> --}}
                         <section class="py-2 pb-5">
                             <h2 class="px-2 text-sm font-bold text-gray-600 mb-2">Delete</h2>
                             <div id="delete"

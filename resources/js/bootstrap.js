@@ -11,19 +11,6 @@ window.Alpine = Alpine
 
 Alpine.start()
 
-// Tippy Js
-
-import tippy from 'tippy.js';
-import 'tippy.js/dist/tippy.css';
-
-document.addEventListener('DOMContentLoaded', () => {
-    tippy('.tooltip', {
-        content: (reference) => reference.getAttribute('data-tippy'),
-        placement: 'bottom'
-    });
-});
-
-
 import ldcover from 'ldcover';
 
 // Member Modal

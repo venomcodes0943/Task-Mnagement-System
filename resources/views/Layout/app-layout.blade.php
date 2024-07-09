@@ -63,7 +63,7 @@
                         </x-sideList>
                     </a>
 
-                    <x-sideList :title="__('Members')">
+                    {{-- <x-sideList :title="__('Members')">
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                             aria-hidden="true" data-slot="icon"
@@ -73,7 +73,7 @@
                                 d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
                                 stroke="#9CA3AF" fill="none" stroke-width="1.5px"></path>
                         </svg>
-                    </x-sideList>
+                    </x-sideList> --}}
                 </ul>
                 <div class="mt-12" x-data="{ show: true }">
                     <div class="flex items-center justify-between px-3">
@@ -158,7 +158,7 @@
                             <x-userPicture class="w-6 h-6" :about="__(auth()->user()->userRole ? auth()->user()->userRole : 'User')" :user="__('https://i.pinimg.com/564x/41/95/7a/41957adcf44b1059bc46a0afda76418a.jpg')" />
                         </x-slot>
 
-                        <x-slot name="userRole">
+                        <x-slot name="userName">
                             <span class="font-medium">{{ auth()->user()->name ? auth()->user()->name : 'User' }}</span>
                         </x-slot>
 
@@ -168,9 +168,6 @@
                         </div>
                     </x-navProfile>
                 </div>
-            </div>
-            <div id="errorMessages" style="display: none;"
-                class="transition-all duration-300 ease-in-out z-50 absolute bottom-10 right-12 px-4 py-2 bg-red-500 rounded-md text-white font-bold tetx-xl">
             </div>
             <!--Page Content-->
             {{ $slot }}
@@ -358,7 +355,10 @@
         let ldcvTaskModal;
         const taskModal = document.querySelector('#taskModal');
         let currentTaskId = null;
+        let currentprojectId = null;
+        let currentscheduleId = null;
         if (taskModal) {
+
             ldcvTaskModal = new ldcover({
                 root: taskModal
             });
@@ -368,141 +368,176 @@
                 const taskId = $(this).attr('task_id');
                 const scheduleId = $(this).attr('schedule_id');
                 currentTaskId = taskId
+                currentprojectId = projectId;
+                currentscheduleId = scheduleId;
                 fetchComments(currentTaskId);
                 fetchCheckOut(currentTaskId);
-                // fetchForTask(projectId, taskId, scheduleId);
+                fetchDescription(currentTaskId);
+                fetchForTask(projectId, taskId, scheduleId);
                 ldcvTaskModal.toggle();
             });
         }
 
-        // function fetchForTask(projectId, taskId, scheduleId) {
-        //     return $.ajax({
-        //         type: "GET",
-        //         url: "{{ route('project', ['id' => ':id']) }}".replace(':id', projectId),
-        //         success: function(response) {
-        //             $("#modalProjectName").text(response.project.name);
-        //             const schedules = response.project.schedule;
-        //             const schedule = schedules.find((schedule) => schedule.id == scheduleId);
+        function fetchForTask(projectId, taskId, scheduleId) {
+            return $.ajax({
+                type: "GET",
+                url: "{{ route('project', ['id' => ':id']) }}".replace(':id', projectId),
+                success: function(response) {
+                    $("#modalProjectName").text(response.project.name);
+                    $("#modalProjectColor").css('background-color', response.project.color);
+                    const schedules = response.project.schedule;
+                    const schedule = schedules.find((schedule) => schedule.id == scheduleId);
 
-        //             if (schedule) {
-        //                 $("#currentSchedule").text(schedule.title)
-        //                 $("#modalScheduleName").text(schedule.title);
-        //             } else {
-        //                 $("#modalScheduleName").text("No Schedule");
-        //             }
-        //             const task = schedule.task.find((task) => task.id == taskId);
-        //             if (task) {
-        //                 $("#modalTaskTitle").text(task.taskTitle);
+                    if (schedule) {
+                        $("#currentSchedule").text(schedule.title);
+                        $("#modalScheduleName").text(schedule.title);
+                    } else {
+                        $("#modalScheduleName").text("No Schedule");
+                    }
 
-        //                 function formatDate(dateString) {
-        //                     const date = new Date(dateString);
-        //                     return new Intl.DateTimeFormat('en-US', {
-        //                         month: 'long',
-        //                         day: 'numeric',
-        //                         year: 'numeric'
-        //                     }).format(date);
-        //                 }
+                    const task = schedule.task.find((task) => task.id == taskId);
+                    if (task) {
+                        $("#modalTaskTitle").text(task.taskTitle);
 
-        //                 const modalDueDate = $("#modalDueDate");
-        //                 if (task.description) {
-        //                     $("#disSpan").text(task.description);
-        //                     $("#modalTaskDescription").text(task.description);
-        //                 }
-        //                 if (task.dueDate) {
-        //                     modalDueDate.text(formatDate(task.dueDate));
-        //                 }
-        //                 const scheduleList = $("#scheduleList");
-        //                 scheduleList.empty();
+                        function formatDate(dateString) {
+                            const date = new Date(dateString);
+                            return new Intl.DateTimeFormat('en-US', {
+                                month: 'long',
+                                day: 'numeric',
+                                year: 'numeric'
+                            }).format(date);
+                        }
 
-        //                 if (schedules.length > 0) {
-        //                     schedules.forEach((schedule) => {
-        //                         scheduleList.attr('selectScheduleId', schedule.id).append(
-        //                             '<div class="selectSchedule flex cursor-pointer items-center px-4 py-2 text-xs text-gray-600 hover:bg-gray-200">' +
-        //                             schedule.title + '</div>');
-        //                     });
-        //                 }
+                        const modalDueDate = $("#modalDueDate");
 
-        //                 if (task.checkout.length > 0) {
-        //                     const checkoutToAdd = $("#checkoutToAdd");
-        //                     checkoutToAdd.empty();
-        //                     task.checkout.forEach((checkOut) => {
-        //                         const checkOutContainer = $("<div>").addClass('flex items-center my-2');
-        //                         const checkbox = $('<input>').attr('type', 'checkbox').addClass(
-        //                             'ui-checkbox mx-2');
+                        if (task.dueDate) {
+                            modalDueDate.text(formatDate(task.dueDate));
+                        }
 
-        //                         const checkoutContent = $('<div>').addClass('text-gray-500 text-sm')
-        //                             .text(checkOut.checkoutName);
-        //                         checkOutContainer.append(checkbox, checkoutContent);
-        //                         checkoutToAdd.append(checkOutContainer);
+                        $('.taskCompleteCheck').prop('checked', false);
 
-        //                         // Check if checkout is completed
-        //                         if (checkOut.completed === 1) {
-        //                             checkbox.prop('checked', true);
-        //                         }
-        //                     });
-        //                     const completedCheckout = task.checkout.filter((item) => item.completed === 1);
-        //                     $("#totalCheckout").text(task.checkout.length);
-        //                     $("#doneCheckout").text(completedCheckout.length);
-        //                 }
+                        if (task.completed === 1) {
+                            $('.taskCompleteCheck').prop('checked', true)
+                        }
+                        const scheduleList = $("#scheduleList");
+                        scheduleList.empty();
 
-        //                 if (task.comment.length > 0) {
-        //                     $("#commentCount").text(task.comment.length > 0 ? task.comment.length : 0);
-        //                     const commentContainer = $("#commentContainer");
-        //                     // Function to format the date
-        //                     function formatDateWithSec(dateString) {
-        //                         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        //                         const date = new Date(dateString);
-        //                         const day = ("0" + date.getDate()).slice(-2);
-        //                         const month = months[date.getMonth()];
-        //                         const hours = ("0" + date.getHours()).slice(-2);
-        //                         const minutes = ("0" + date.getMinutes()).slice(-2);
-        //                         const seconds = ("0" + date.getSeconds()).slice(-2);
-        //                         return `${day} ${month} - ${hours}:${minutes}:${seconds}`;
-        //                     }
-        //                     task.comment.forEach((commentItem) => {
-        //                         const commentDiv = $("<div>").addClass('flex mt-2').append(
-        //                             $("<div>").addClass('ml-4 flex-1')
-        //                             .append(
-        //                                 $("<div>").addClass('flex items-center justify-between')
-        //                                 .append(
-        //                                     $("<div>").addClass('flex items-center space-x-2')
-        //                                     .append(
-        //                                         $("<div>").addClass('text-gray-600 font-semibold')
-        //                                         .text(commentItem.user.name),
-        //                                         $("<div>").addClass('text-gray-500 text-xs mt-1')
-        //                                         .text(formatDateWithSec(commentItem.created_at))
-        //                                     ),
-        //                                     $("<span>").addClass('cursor-pointer deleteComment')
-        //                                     .attr('delCommentId', commentItem.id)
-        //                                     .append(
-        //                                         `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-3.5 w-3.5 ltr:mr-2 rtl:ml-2" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke="#6B7280" fill="none" stroke-width="1.5px"></path></svg>`
-        //                                     ),
-        //                                     $("<div>").addClass(
-        //                                         'flex items-center space-x-1 bg-white deleteC'
-        //                                     ).css('display', 'none').append(
-        //                                         $("<span>").addClass('text-sm text-gray-800').text(
-        //                                             'Are you sure to delete?'),
-        //                                         $("<span>").addClass('cursor-pointer yesDelete')
-        //                                         .append(
-        //                                             `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 cursor-pointer text-green-600 hover:text-green-800 ltr:mr-1 rtl:ml-1" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="#16A34A" fill="none" stroke-width="1.5px"></path></svg>`
-        //                                         ),
-        //                                         $("<span>").addClass('cursor-pointer noDelete')
-        //                                         .append(
-        //                                             `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 cursor-pointer text-red-600 hover:text-red-800" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="#DC2626" fill="none" stroke-width="1.5px"></path></svg>`
-        //                                         )
-        //                                     )
-        //                                 ),
-        //                                 $("<p>").addClass('pt-1 text-sm text-gray-500').text(
-        //                                     commentItem.taskComment)
-        //                             )
-        //                         );
-        //                         commentContainer.append(commentDiv);
-        //                     });
-        //                 }
-        //             }
-        //         }
-        //     });
-        // }
+                        if (schedules.length > 0) {
+                            schedules.forEach((schedule) => {
+                                scheduleList.append(
+                                    '<div class="selectSchedule flex cursor-pointer items-center px-4 py-2 text-xs text-gray-600 hover:bg-gray-200" data-schedule-id="' +
+                                    schedule.id + '">' +
+                                    schedule.title + '</div>');
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
+
+        function fetchDescription(taskId) {
+            return $.ajax({
+                type: "GET",
+                url: "{{ route('task.show', ['id' => ':id']) }}".replace(':id', taskId),
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    $("#modalTaskDescription").val("");
+                    $("#disSpan").text("Description");
+
+                    if (response.description !== null) {
+                        $("#disSpan").text(response.description);
+                        $("#modalTaskDescription").val(response.description);
+                    } else {
+                        $("#disSpan").text("Description");
+                        $("#modalTaskDescription").val('');
+                    }
+                }
+            });
+        }
+
+        $(document).on('click', '#saveDescription', function() {
+            const desVal = $("#modalTaskDescription").val();
+            console.log(desVal);
+            $.ajax({
+                type: "POST",
+                url: "{{ route('task.update', ['id' => ':id']) }}".replace(':id', currentTaskId),
+                data: {
+                    description: desVal,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    console.log(response);
+                    fetchDescription(currentTaskId);
+                    toggleVisibility('#disToWrite', '#disSpan')
+                }
+            });
+        });
+        $(document).on('input', '#taskDueDate', function() {
+            const dueDate = $("#taskDueDate").val();
+            console.log(dueDate);
+        });
+
+
+        $(document).on('click', '.selectSchedule', function() {
+            var selectedId = $(this).data('schedule-id');
+            $.ajax({
+                type: "POST",
+                url: "{{ route('task.update', ['id' => ':id']) }}".replace(':id', currentTaskId),
+                data: {
+                    scheduleIdChange: selectedId,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    fetchSchedule();
+                    if (response.schedule) {
+                        currentscheduleId = selectedId;
+                        $("#currentSchedule").text(response.schedule.title);
+                        $("#modalScheduleName").text(response.schedule.title);
+                    } else {
+                        console.error('Schedule update failed.');
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+
+
+        $(document).on('click', "#modalTaskTitle", function() {
+            $(this).off('keydown').on('keydown', function(event) {
+                if (event.keyCode === 13) { // Enter key
+                    event.preventDefault();
+                    $("#modalTaskTitle").attr('contenteditable', 'false');
+                    $.ajax({
+                        type: "POST",
+                        url: `{{ route('task.update', ['id' => ':id']) }}`.replace(':id',
+                            currentTaskId),
+                        data: {
+                            schedule_id: currentscheduleId,
+                            taskTitle: $(this).text(),
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            fetchSchedule();
+                            if ($("#modalTaskTitle").attr('contenteditable') !== 'true') {
+                                $("#modalTaskTitle").attr('contenteditable', 'true');
+                            }
+                            fetchProjects(currentprojectId, currentTaskId, currentscheduleId);
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(xhr, status, error);
+                        }
+                    });
+                }
+            });
+        });
+
+
 
         function fetchCheckOut(taskId) {
             return $.ajax({
@@ -512,17 +547,24 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
+                    const checkoutToAdd = $("#checkoutToAdd");
+                    checkoutToAdd.empty();
                     if (response.checkout.length > 0) {
-                        const checkoutToAdd = $("#checkoutToAdd");
-                        checkoutToAdd.empty();
                         response.checkout.forEach((checkOut) => {
-                            const checkOutContainer = $("<div>").addClass('flex items-center my-2');
+                            const checkOutContainer = $("<div>").addClass(
+                                'flex items-center my-2 relative');
                             const checkbox = $('<input>').attr('type', 'checkbox').addClass(
-                                'ui-checkbox mx-2').data('checkBoxId', checkOut.id);
+                                'ui-checkbox checkoutCheck mx-2').data('checkBoxId', checkOut.id);
 
-                            const checkoutContent = $('<div>').addClass('text-gray-500 text-sm')
+                            const checkoutContent = $('<div>').addClass(
+                                    'text-gray-500 text-sm max-w-52')
                                 .text(checkOut.checkoutName);
-                            checkOutContainer.append(checkbox, checkoutContent);
+                            const deleteCheckout = $(
+                                    `<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-3.5 w-3.5 ltr:mr-2 rtl:ml-2" width="24"  height="24" ><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"  stroke="#6B7280" fill="none" stroke-width="1.5px"></path></svg>`
+                                )
+                                .addClass('absolute right-2 cursor-pointer deleteCheckOut').data(
+                                    'checkBoxId', checkOut.id);
+                            checkOutContainer.append(checkbox, checkoutContent, deleteCheckout);
                             checkoutToAdd.append(checkOutContainer);
 
                             // Check if checkout is completed
@@ -534,16 +576,48 @@
                         $("#totalCheckout").text(response.checkout.length);
                         $("#doneCheckout").text(completedCheckout.length);
                     } else {
-
+                        checkoutToAdd.empty();
+                        $("#totalCheckout").text(0);
+                        $("#doneCheckout").text(0);
                     }
                 }
             });
         }
 
-        $(document).on('click', '.ui-checkbox', function() {
-            const checkOutId = $(this).data('checkBoxId');
+
+        $(document).on('click', '.taskCompleteCheck', function() {
             const isChecked = $(this).prop('checked');
             console.log(isChecked);
+            if (isChecked) {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('task.update', ['id' => ':id']) }}".replace(':id', currentTaskId),
+                    data: {
+                        completed: 1,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        fetchSchedule();
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('task.update', ['id' => ':id']) }}".replace(':id', currentTaskId),
+                    data: {
+                        uncompleted: 0,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        fetchSchedule();
+                    }
+                });
+            }
+        });
+
+        $(document).on('click', '.checkoutCheck', function() {
+            const checkOutId = $(this).data('checkBoxId');
+            const isChecked = $(this).prop('checked');
             if (isChecked) {
                 $.ajax({
                     type: "POST",
@@ -553,7 +627,6 @@
                         _token: "{{ csrf_token() }}"
                     },
                     success: function(response) {
-                        console.log(response);
                         fetchCheckOut(currentTaskId);
                         fetchSchedule();
                     }
@@ -567,7 +640,6 @@
                         _token: "{{ csrf_token() }}"
                     },
                     success: function(response) {
-                        console.log(response);
                         fetchCheckOut(currentTaskId);
                         fetchSchedule();
                     }
@@ -575,8 +647,43 @@
             }
         });
 
-        $(document).on('click', '', function() {
+        $(document).on('click', '.deleteCheckOut', function() {
+            const checkBoxId = $(this).data('checkBoxId');
+            $.ajax({
+                type: "DELETE",
+                url: "{{ route('checkout.delete', ['id' => ':id']) }}".replace(':id', checkBoxId),
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    fetchCheckOut(currentTaskId);
+                    fetchSchedule();
+                }
+            });
+        });
 
+        $(document).on('click', '#addWriteItem', function() {
+            const newCheckOut = $("#addCheckOut").val();
+            $.ajax({
+                type: "POST",
+                url: "{{ route('checkout.create') }}",
+                data: {
+                    task_id: currentTaskId,
+                    checkoutName: newCheckOut,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    $("#addCheckOut").val('');
+                    fetchCheckOut(currentTaskId);
+                    fetchSchedule();
+                    toggleVisibility("#writeItem", "#addItem");
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error: ', error);
+                    console.error('Status: ', status);
+                    console.error('Response: ', xhr.responseText);
+                }
+            });
         });
 
 
@@ -611,12 +718,13 @@
                                 $("<div>").addClass('ml-4 flex-1').append(
                                     $("<div>").addClass('flex items-center justify-between')
                                     .append(
-                                        $("<div>").addClass('flex items-center space-x-2')
+                                        $("<div>").addClass('flex flex-wrap items-center')
                                         .append(
                                             $("<div>").addClass('text-gray-600 font-semibold')
                                             .text(
                                                 commentItem.user.name),
-                                            $("<div>").addClass('text-gray-500 text-xs mt-1')
+                                            $("<div>").addClass(
+                                                'text-gray-500 text-xs md:mt-1 pl-1')
                                             .text(
                                                 formatDateWithSec(commentItem.created_at))
                                         ),
@@ -668,11 +776,62 @@
                         _token: "{{ csrf_token() }}"
                     },
                     success: function(response) {
-                        console.log(response);
                         fetchComments(currentTaskId);
                         fetchSchedule();
                     }
                 });
+            });
+        });
+
+        $(document).on('click', '#saveComment', function() {
+            const addComment = $("#addComment").val();
+            $.ajax({
+                type: "POST",
+                url: "{{ route('comment.create') }}",
+                data: {
+                    user_id: '{{ auth()->user()->id }}',
+                    task_id: currentTaskId,
+                    taskComment: addComment,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    $("#addComment").val('');
+                    $("#writeComment").hide();
+                    $("#comment").show();
+                    fetchComments(currentTaskId);
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                    console.error('Status:', status);
+                    console.error('Response:', xhr.responseText);
+                    let errorMessage =
+                        'An error occurred while saving the comment. Please try again.';
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        errorMessage = '';
+                        $.each(xhr.responseJSON.errors, function(key, messages) {
+                            $.each(messages, function(index, message) {
+                                errorMessage += message + '<br>';
+                            });
+                        });
+                    }
+
+                    // Create the error message div
+                    const errorDiv = $('<div></div>')
+                        .addClass('bg-red-500 text-white px-3 py-1 text-sm rounded-sm shadow mt-2')
+                        .html(errorMessage)
+                        .hide(); // Hide initially for fadeIn effect
+
+                    // Append the error message div to the error container and fade in
+                    $('#error-container').empty().append(errorDiv);
+                    errorDiv.fadeIn('slow');
+
+                    // Hide the error message after 1.5 seconds
+                    setTimeout(function() {
+                        errorDiv.fadeOut('slow', function() {
+                            $(this).remove(); // Remove the element after fade out
+                        });
+                    }, 1500);
+                }
             });
         });
 
@@ -699,7 +858,6 @@
         })
 
 
-
         // Delete Task
 
         $(document).on('click', '.openModal', function() {
@@ -712,26 +870,14 @@
                         _token: "{{ csrf_token() }}"
                     },
                     success: function(response) {
-                        console.log(response);
                         ldcvTaskModal.toggle();
                         fetchSchedule();
+                        $("#delete").removeClass('hidden').addClass('flex');
+                        $("#todelete").addClass('hidden');
                     }
                 });
             });
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -752,7 +898,6 @@
                 });
             }
         }
-
 
         function fetchSideProjects() {
             $.ajax({
@@ -882,6 +1027,7 @@
                 }
             });
         }
+
         fetchProjects();
 
         // Event listener for color selection
@@ -910,6 +1056,7 @@
                     url: "{{ route('project.create') }}",
                     type: "POST",
                     data: {
+                        user_id: '{{ auth()->user()->id }}',
                         name: projectName,
                         color: projectColor,
                         _token: '{{ csrf_token() }}'
@@ -920,15 +1067,7 @@
                         ldcvProjectModal.toggle();
                     },
                     error: function(xhr, status, error) {
-                        if (xhr.status === 422) {
-                            let response = JSON.parse(xhr.responseText);
-                            let error = response.errors.name ? response.errors.name[0] :
-                                'An error occurred';
-                            $("#errorMessages").text(error).show();
-                            setTimeout(() => {
-                                $("#errorMessages").hide();
-                            }, 2500);
-                        }
+                        console.log("Errors:", xhr.responseJSON);
                     }
                 });
 

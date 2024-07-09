@@ -5,8 +5,7 @@
 
         {{-- Page Title Bar  --}}
         <x-mainPageTitle :title="__('Projects')">
-            <div
-                class="flex  items-end space-y-2 md:space-y-0 mb-4 md:mb-2 space-x-2 flex-wrap md:items-center">
+            <div class="flex  items-end space-y-2 md:space-y-0 mb-4 md:mb-2 space-x-2 flex-wrap md:items-center">
                 <div id="active" class="flex items-center py-1 bg-slate-200 px-1 md:px-3 rounded-md cursor-pointer">
                     <span>
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -67,14 +66,7 @@
                 fetchSideProjects();
             },
             error: function(xhr, status, error) {
-                if (xhr.status === 422) {
-                    let response = JSON.parse(xhr.responseText);
-                    let errors = response[1].name[0];
-                    $("#errorMessages").text(errors).show();
-                    setTimeout(() => {
-                        $("#errorMessages").hide();
-                    }, 2000);
-                }
+                console.log(xhr.responseJSON);
             }
         });
     });
@@ -92,14 +84,7 @@
                 fetchSideProjects();
             },
             error: function(xhr, status, error) {
-                if (xhr.status === 422) {
-                    let response = JSON.parse(xhr.responseText);
-                    let errors = response[1].name[0];
-                    $("#errorMessages").text(errors).show();
-                    setTimeout(() => {
-                        $("#errorMessages").hide();
-                    }, 2000);
-                }
+                console.log(xhr.responseJSON);
             }
         });
     });
